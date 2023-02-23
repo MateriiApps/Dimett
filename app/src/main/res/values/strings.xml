@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Dimett</string>
+
+    <string name="action_login">Log In</string>
+    <string name="action_vote">Vote</string>
+    <string name="action_retry">Retry</string>
+
+    <string name="label_instance">Instance</string>
+
+    <string name="msg_invalid_instance">Failed to connect to this Mastodon instance, make sure the url was entered properly.</string>
+    <string name="msg_no_content">Hmmm… There doesn\'t seem to be anything here</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_explore">Explore</string>
+    <string name="title_inbox">Inbox</string>
+    <string name="title_messages">Messages</string>
+
+    <string name="cd_avatar">%1$s\'s avatar</string>
+    <string name="cd_boosted">Boosted</string>
+    <string name="cd_bot">Bot</string>
+    <string name="cd_boost">Boost</string>
+    <string name="cd_reply">Reply</string>
+    <string name="cd_favorite">Favorite</string>
+    <string name="cd_play">Play</string>
+    <string name="cd_pause">Pause</string>
+    <string name="cd_thinking_emoji">Thinking Emoji</string>
+
+    <string name="post_user_boosted">%1$s boosted</string>
+    <string name="post_replying_to">Replying to **[@%1$s]{onUserClick}**</string>
+</resources>
