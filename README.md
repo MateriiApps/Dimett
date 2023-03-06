@@ -24,7 +24,7 @@
 
 | Instance Setup | Home |
 | --------------- | --------------- |
-| <img src="github/images/Home.png" width="200px"> | <img src="github/images/Setup.png" width="200px">
+| <img src="github/images/Setup.png" width="200px"> | <img src="github/images/Home.png" width="200px">
 
 Installation
 ---
