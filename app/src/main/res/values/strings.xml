@@ -4,6 +4,7 @@
     <string name="action_login">Log In</string>
     <string name="action_vote">Vote</string>
     <string name="action_retry">Retry</string>
+    <string name="action_share">Share</string>
 
     <string name="label_instance">Instance</string>
 

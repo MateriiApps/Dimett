@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.ui.widgets.attachments.Attachments
 import xyz.wingio.dimett.utils.getString
 import xyz.wingio.dimett.utils.processPostContent
+import xyz.wingio.dimett.utils.shareText
 import xyz.wingio.dimett.utils.toEmojiMap
 import xyz.wingio.dimett.utils.toMentionMap
 
@@ -37,6 +39,7 @@ fun Post(
     onBoostClick: (String) -> Unit = {},
     onVotedInPoll: (String, List<Int>) -> Unit = { _, _ -> }
 ) {
+    val ctx = LocalContext.current
     val _post = post.boosted ?: post
     val timeString = DateUtils.getRelativeTimeSpanString(
         /* time = */ post.createdAt.toEpochMilliseconds(),
@@ -150,6 +153,7 @@ fun Post(
                 onReplyClick = { onReplyClick(_post.id) },
                 onFavoriteClick = { onFavoriteClick(_post.id) },
                 onBoostClick = { onBoostClick(_post.id) },
+                onShareClick = { ctx.shareText(_post.uri) }
             )
         }
     }

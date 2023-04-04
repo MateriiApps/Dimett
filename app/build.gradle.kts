@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
     kotlin("kapt")
-    kotlin("plugin.serialization") version "1.7.10"
+    kotlin("plugin.serialization") version "1.8.20"
 }
 
 android {
@@ -29,18 +29,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.4.4-dev-k1.8.20-f6ae19e64ff"
     }
     packagingOptions {
         resources {
@@ -52,9 +52,9 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.browser:browser:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.activity:activity-compose:1.5.1")
+    implementation("androidx.browser:browser:1.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.activity:activity-compose:1.7.0")
     implementation(platform("androidx.compose:compose-bom:2022.10.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -62,9 +62,9 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material")
     implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.core:core-ktx:+")
-    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
-    implementation("androidx.emoji2:emoji2:1.1.0")
+    implementation("androidx.core:core-ktx")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha18")
+    implementation("androidx.emoji2:emoji2:1.3.0")
 
     val koinVersion = "3.2.0"
 

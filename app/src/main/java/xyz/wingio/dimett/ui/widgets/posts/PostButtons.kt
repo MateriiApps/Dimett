@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.RepeatOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Repeat
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -30,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.R
 import xyz.wingio.dimett.ui.components.Text
+import xyz.wingio.dimett.utils.formatNumber
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
@@ -41,7 +43,8 @@ fun PostButtons(
     favorited: Boolean,
     onReplyClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
-    onBoostClick: () -> Unit = {}
+    onBoostClick: () -> Unit = {},
+    onShareClick: () -> Unit = {}
 ) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -50,20 +53,27 @@ fun PostButtons(
         PostButton(
             icon = Icons.Outlined.ChatBubbleOutline,
             contentDescription = R.string.cd_reply,
-            text = { Text(replies.toString()) },
+            text = { Text(formatNumber(replies)) },
             onClick = onReplyClick
         )
         PostButton(
             icon = if (boosted) Icons.Filled.RepeatOn else Icons.Outlined.Repeat,
             contentDescription = R.string.cd_boost,
-            text = { Text(boosts.toString()) },
+            text = { Text(formatNumber(boosts)) },
             onClick = onBoostClick
         )
         PostButton(
             icon = if (favorited) Icons.Filled.Star else Icons.Outlined.StarBorder,
             contentDescription = R.string.cd_favorite,
-            text = { Text(favorites.toString()) },
+            text = { Text(formatNumber(favorites)) },
             onClick = onFavoriteClick
+        )
+        Spacer(Modifier.weight(1f))
+        PostButton(
+            icon = Icons.Outlined.Share,
+            contentDescription = R.string.action_share,
+            text = { Text(stringResource(R.string.action_share)) },
+            onClick = onShareClick
         )
     }
 }
