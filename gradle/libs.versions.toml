@@ -1,0 +1,81 @@
+[versions]
+accompanist = "0.31.2-alpha"
+activity-compose = "1.8.1"
+agp = "8.1.4"
+browser = "1.7.0"
+coil = "2.4.0"
+compose-bom = "2023.10.01"
+compose-compiler = "1.5.4"
+compose-image-blurhash = "2.1.0"
+emoji2 = "1.4.0"
+koin = "3.4.0"
+kotlin = "1.9.20"
+kotlinx = "0.4.1"
+ksp = "1.9.20-1.0.14"
+ktor = "2.3.3"
+lifecycle-runtime-ktx = "2.6.2"
+media3 = "1.2.0"
+paging-compose = "3.2.1"
+room = "2.6.0"
+simpleast-core = "master-SNAPSHOT"
+voyager = "1.0.0-rc07"
+
+[libraries]
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
+accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+androidx-emoji2 = { group = "androidx.emoji2", name = "emoji2", version.ref = "emoji2" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
+androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-image-blurhash = { group = "com.github.orlando-dev-code", name = "compose-image-blurhash", version.ref = "compose-image-blurhash" }
+compose-material = { group = "androidx.compose.material", name = "material" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+core-ktx = { group = "androidx.core", name = "core-ktx" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+simpleast-core = { group = "com.github.MateriiApps.SimplerAST", name = "simpleast-core", version.ref = "simpleast-core" }
+voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
+voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+voyager-tab-navigator = { group = "cafe.adriel.voyager", name = "voyager-tab-navigator", version.ref = "voyager" }
+voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
+
+[bundles]
+accompanist = ["accompanist-systemuicontroller", "accompanist-pager", "accompanist-pager-indicators"]
+androidx = ["core-ktx", "androidx-browser", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-paging-compose", "androidx-emoji2"]
+coil = ["coil-compose", "coil", "coil-gif"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3", "compose-material", "compose-material-icons-extended"]
+github = ["compose-image-blurhash", "simpleast-core"]
+koin = ["koin-core", "koin-androidx-compose", "koin-android"]
+kotlinx = ["kotlinx-datetime"]
+ktor = ["ktor-client-cio", "ktor-client-content-negotiation", "ktor-client-core", "ktor-client-logging", "ktor-serialization-kotlinx-json"]
+media3 = ["androidx-media3-exoplayer", "androidx-media3-ui"]
+room = ["androidx-room-compiler", "androidx-room-runtime"]
+voyager = ["voyager-transitions", "voyager-navigator", "voyager-koin", "voyager-tab-navigator"]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

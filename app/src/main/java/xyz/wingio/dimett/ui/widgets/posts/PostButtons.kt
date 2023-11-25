@@ -48,7 +48,7 @@ fun PostButtons(
 ) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.aligned(Alignment.CenterVertically)
     ) {
         PostButton(
             icon = Icons.Outlined.ChatBubbleOutline,

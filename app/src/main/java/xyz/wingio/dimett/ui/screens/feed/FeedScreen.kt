@@ -27,7 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -91,8 +92,12 @@ class FeedTab : Tab {
                         }
                     }
                 }
-                items(posts) { post ->
-                    post?.let {
+                items(
+                    count = posts.itemCount,
+                    key = posts.itemKey(),
+                    contentType = posts.itemContentType()
+                ) { post ->
+                    posts[post]?.let {
                         val realPost = viewModel.modifiedPosts[it.id] ?: it
                         Post(
                             post = realPost,

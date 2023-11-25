@@ -9,6 +9,7 @@ import com.materii.simplerast.core.parser.ParseSpec
 import com.materii.simplerast.core.parser.Parser
 import com.materii.simplerast.core.parser.Rule
 import com.materii.simplerast.core.simple.CoreMarkdownRules
+import com.materii.simplerast.code.CodeRules
 import xyz.wingio.dimett.ast.nodes.ClickableNode
 import xyz.wingio.dimett.ast.nodes.EmojiNode
 import xyz.wingio.dimett.ast.nodes.MentionNode

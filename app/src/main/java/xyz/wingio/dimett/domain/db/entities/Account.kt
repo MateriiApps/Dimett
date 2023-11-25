@@ -2,7 +2,6 @@ package xyz.wingio.dimett.domain.db.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 import xyz.wingio.dimett.rest.dto.CustomEmoji
 import xyz.wingio.dimett.rest.dto.user.Field
@@ -12,7 +11,7 @@ import xyz.wingio.dimett.rest.dto.user.Field
         entity = Instance::class,
         parentColumns = ["url"],
         childColumns = ["instance"],
-        onDelete = CASCADE
+        onDelete = ForeignKey.CASCADE
     )]
 )
 data class Account(
