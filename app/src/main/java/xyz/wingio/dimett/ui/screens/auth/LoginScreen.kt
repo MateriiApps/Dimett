@@ -9,14 +9,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,11 +26,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
 import xyz.wingio.dimett.R
 import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.ui.viewmodels.auth.LoginViewModel
 import xyz.wingio.dimett.ui.widgets.auth.InstancePreview
+import xyz.wingio.dimett.ui.components.IntentHandler
 import xyz.wingio.dimett.utils.getString
 import kotlin.time.Duration.Companion.seconds
 
@@ -40,14 +42,14 @@ class LoginScreen : Screen {
     @Composable
     override fun Content() = Screen()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Screen(
         viewModel: LoginViewModel = getScreenModel()
     ) {
+        val navigator = LocalNavigator.currentOrThrow
         val ctx = LocalContext.current
         var lastTyped by remember {
-            mutableStateOf(0L)
+            mutableLongStateOf(0L)
         }
 
         // Only send request when user is done typing
@@ -59,6 +61,10 @@ class LoginScreen : Screen {
                     viewModel.loadDetails()
                 }
             }
+        }
+
+        IntentHandler { intent ->
+            viewModel.handleIntent(intent, navigator)
         }
 
         Scaffold { pv ->
