@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
@@ -22,8 +24,6 @@ import xyz.wingio.dimett.ui.screens.auth.LoginScreen
 import xyz.wingio.dimett.ui.screens.main.MainScreen
 import xyz.wingio.dimett.ui.theme.DimettTheme
 import xyz.wingio.dimett.ui.viewmodels.auth.instanceUrl
-import xyz.wingio.dimett.utils.EmojiUtils
-import xyz.wingio.dimett.utils.getLogger
 
 class MainActivity : ComponentActivity(), KoinComponent {
 
@@ -34,23 +34,25 @@ class MainActivity : ComponentActivity(), KoinComponent {
 
     private lateinit var navigator: Navigator
 
-    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        val isSignedIn = accountManager.current != null
-        val startScreen = if (isSignedIn) MainScreen() else LoginScreen()
 
         setContent {
-            val logger = getLogger()
-
-            logger.debug(EmojiUtils.regex)
-
             DimettTheme {
-                Navigator(startScreen) {
-                    SlideTransition(it)
-                    navigator = it
+                Surface(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if (accountManager.isInitialized) {
+                        val isSignedIn = accountManager.current != null
+                        val startScreen = if (isSignedIn) MainScreen() else LoginScreen()
+
+                        Navigator(startScreen) {
+                            SlideTransition(it)
+                            navigator = it
+                        }
+                    }
                 }
             }
         }
@@ -90,4 +92,5 @@ class MainActivity : ComponentActivity(), KoinComponent {
             }
         }
     }
+
 }

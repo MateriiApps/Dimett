@@ -1,11 +1,16 @@
 package xyz.wingio.dimett.domain.manager
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import xyz.wingio.dimett.domain.db.AppDatabase
 import xyz.wingio.dimett.domain.db.entities.Account
 import xyz.wingio.dimett.rest.dto.user.CredentialUser
+import xyz.wingio.dimett.utils.mainThread
 
 class AccountManager(
     db: AppDatabase,
@@ -15,7 +20,10 @@ class AccountManager(
     private val managerScope = CoroutineScope(Dispatchers.IO)
     private val dao = db.accountsDao()
 
-    var accounts: MutableList<Account> = mutableListOf()
+    var isInitialized by mutableStateOf(false)
+        private set
+
+    var accounts: MutableList<Account> = mutableStateListOf()
         private set
 
     val current: Account?
@@ -23,7 +31,11 @@ class AccountManager(
 
     init {
         managerScope.launch {
-            accounts = dao.listAccounts().toMutableList()
+            val accs = dao.listAccounts()
+            mainThread {
+                accounts += accs
+                isInitialized = true
+            }
         }
     }
 

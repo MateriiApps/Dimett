@@ -3,10 +3,11 @@ package xyz.wingio.dimett.utils
 import android.content.Context
 import android.content.Intent
 import android.icu.text.CompactDecimalFormat
-import androidx.compose.runtime.Composable
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.text.parseAsHtml
-import org.koin.androidx.compose.get
+import org.koin.core.context.GlobalContext
 import org.koin.core.qualifier.named
 import xyz.wingio.dimett.BuildConfig
 import xyz.wingio.dimett.R
@@ -14,6 +15,12 @@ import xyz.wingio.dimett.rest.dto.CustomEmoji
 import xyz.wingio.dimett.rest.dto.post.Mention
 import xyz.wingio.dimett.rest.dto.post.Post
 import java.util.Locale
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.firstOrNull
+import kotlin.collections.forEach
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 val String.plain: String
     get() = replace("<br> ", "<br>&nbsp;")
@@ -40,8 +47,7 @@ fun List<Mention>.toMentionMap(): Map<String, String> {
     return map
 }
 
-@Composable
-fun getLogger(): Logger = get(named("default"))
+fun getLogger(): Logger = GlobalContext.get().get(named("default"))
 
 fun String.toAnnotatedString() = AnnotatedString(this)
 
@@ -57,10 +63,16 @@ fun processPostContent(post: Post): String {
 fun Context.getResId(emojiCode: String) =
     resources.getIdentifier(emojiCode, "raw", BuildConfig.APPLICATION_ID)
 
-fun formatNumber(number: Int): String = CompactDecimalFormat.getInstance(Locale.getDefault(), CompactDecimalFormat.CompactStyle.SHORT).format(number)
+fun formatNumber(number: Int): String =
+    CompactDecimalFormat.getInstance(Locale.getDefault(), CompactDecimalFormat.CompactStyle.SHORT)
+        .format(number)
 
 fun Context.shareText(string: String) = Intent(Intent.ACTION_SEND).apply {
     type = "text/plain"
     putExtra(Intent.EXTRA_TEXT, string)
     startActivity(Intent.createChooser(this, getString(R.string.action_share)))
+}
+
+fun mainThread(block: () -> Unit) {
+    Handler(Looper.getMainLooper()).post(block)
 }
