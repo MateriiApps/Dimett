@@ -35,11 +35,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
-import coil.annotation.ExperimentalCoilApi
 import xyz.wingio.dimett.rest.dto.post.MediaAttachment
 import xyz.wingio.dimett.ui.components.Text
 
-@kotlin.OptIn(ExperimentalCoilApi::class)
 @Composable
 @OptIn(androidx.media3.common.util.UnstableApi::class)
 fun SingleGifAttachment(

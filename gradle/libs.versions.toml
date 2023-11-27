@@ -38,7 +38,6 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-image-blurhash = { group = "com.github.orlando-dev-code", name = "compose-image-blurhash", version.ref = "compose-image-blurhash" }
-compose-material = { group = "androidx.compose.material", name = "material" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -54,6 +53,7 @@ ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-conte
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+pullrefresh = { group = "dev.materii.pullrefresh", name = "pullrefresh", version = "1.1.0" }
 simpleast-core = { group = "com.github.MateriiApps.SimplerAST", name = "simpleast-core", version.ref = "simpleast-core" }
 voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
 voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
@@ -64,7 +64,7 @@ voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitio
 accompanist = ["accompanist-systemuicontroller", "accompanist-pager", "accompanist-pager-indicators"]
 androidx = ["core-ktx", "androidx-browser", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-paging-compose", "androidx-emoji2"]
 coil = ["coil-compose", "coil", "coil-gif"]
-compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3", "compose-material", "compose-material-icons-extended"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3", "compose-material-icons-extended"]
 github = ["compose-image-blurhash", "simpleast-core"]
 koin = ["koin-core", "koin-androidx-compose", "koin-android"]
 kotlinx = ["kotlinx-datetime"]
