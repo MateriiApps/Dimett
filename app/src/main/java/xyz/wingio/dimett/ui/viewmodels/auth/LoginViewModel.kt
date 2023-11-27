@@ -34,9 +34,13 @@ class LoginViewModel(
     var didError by mutableStateOf(false)
     var nodeInfo by mutableStateOf(null as NodeInfo?)
 
+    var loginLoading by mutableStateOf(false)
     var nodeInfoLoading by mutableStateOf(false)
 
     private var instanceUrl: String? = null
+
+    val instanceIsMastodon: Boolean
+        get() = nodeInfo?.metadata?.features?.contains("mastodon_api") == true || nodeInfo?.software?.name == "mastodon"
 
     fun login(context: Context) {
         if (instance.isEmpty()) return
@@ -113,6 +117,7 @@ class LoginViewModel(
         coroutineScope.launch {
             val instance = instanceManager[url] ?: return@launch
 
+            loginLoading = true
             mastodonRepository.getToken(
                 instanceUrl = instance.url,
                 clientId = instance.clientId,
@@ -132,6 +137,7 @@ class LoginViewModel(
                     }
             }
 
+            loginLoading = false
             instanceUrl = null // Don't let duplicate intents happen
         }
     }

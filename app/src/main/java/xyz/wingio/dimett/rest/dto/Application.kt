@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Application(
     val name: String,
     val website: String? = null,
-    @SerialName("vapid_key") val vapidKey: String,
+    @SerialName("vapid_key") val vapidKey: String? = null,
     @SerialName("client_id") val clientId: String? = null,
     @SerialName("client_secret") val clientSecret: String? = null,
     val id: String? = null

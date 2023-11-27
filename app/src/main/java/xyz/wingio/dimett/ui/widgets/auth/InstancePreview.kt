@@ -2,8 +2,12 @@ package xyz.wingio.dimett.ui.widgets.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +31,7 @@ fun InstancePreview(
     url: String,
     nodeInfo: NodeInfo
 ) {
+    val iconSize = 56.dp
     val name = nodeInfo.metadata?.nodeName ?: url
 
     val icon = when (nodeInfo.software.name) {
@@ -36,24 +41,25 @@ fun InstancePreview(
         else -> painterResource(R.drawable.img_logo_fediverse)
     }
 
-    ElevatedCard(
-        modifier = Modifier.width(350.dp)
+    Box(
+        modifier = Modifier
+            .width(350.dp)
+            .padding(bottom = iconSize / 2)
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+        ElevatedCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = iconSize / 2)
         ) {
-            Image(
-                painter = icon,
-                contentDescription = nodeInfo.software.name,
-                modifier = Modifier
-                    .size(55.dp)
-                    .shadow(2.dp, CircleShape)
-            )
             Column(
-                verticalArrangement = Arrangement.spacedBy(3.dp)
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
+                Spacer(Modifier.height(16.dp))
+
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodyLarge,
@@ -82,5 +88,14 @@ fun InstancePreview(
             }
         }
 
+        Image(
+            icon,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(iconSize)
+                .align(Alignment.TopCenter)
+                .shadow(10.dp, CircleShape)
+        )
     }
 }

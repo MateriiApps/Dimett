@@ -1,9 +1,13 @@
 package xyz.wingio.dimett.ui.screens.auth
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -47,6 +51,34 @@ class LoginScreen : Screen {
         viewModel: LoginViewModel = getScreenModel()
     ) {
         val navigator = LocalNavigator.currentOrThrow
+
+        IntentHandler { intent ->
+            viewModel.handleIntent(intent, navigator)
+        }
+
+        Scaffold { pv ->
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(pv)
+                    .fillMaxSize()
+            ) {
+                Image(painter = painterResource(R.drawable.ic_app), contentDescription = null)
+
+                if(viewModel.loginLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Login(viewModel)
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ColumnScope.Login(
+        viewModel: LoginViewModel
+    ) {
         val ctx = LocalContext.current
         var lastTyped by remember {
             mutableLongStateOf(0L)
@@ -63,63 +95,54 @@ class LoginScreen : Screen {
             }
         }
 
-        IntentHandler { intent ->
-            viewModel.handleIntent(intent, navigator)
+        if (viewModel.nodeInfoLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(18.dp),
+                strokeWidth = 3.dp
+            )
         }
 
-        Scaffold { pv ->
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(pv)
-                    .fillMaxSize()
-            ) {
-                Image(painter = painterResource(R.drawable.ic_app), contentDescription = null)
-
-                if (viewModel.nodeInfoLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(18.dp),
-                        strokeWidth = 3.dp
-                    )
-                }
-
-                viewModel.nodeInfo?.let {
-                    InstancePreview(
-                        url = viewModel.instance,
-                        nodeInfo = it
-                    )
-                }
-
-                OutlinedTextField(
-                    value = viewModel.instance,
-                    onValueChange = {
-                        viewModel.instance = it
-                        lastTyped = 0L
-                        viewModel.nodeInfo = null
-                    },
-                    label = { Text(getString(R.string.label_instance)) },
-                    placeholder = { Text("mastodon.online") },
-                    isError = viewModel.didError
+        AnimatedVisibility(
+            visible = viewModel.nodeInfo != null
+        ) {
+            viewModel.nodeInfo?.let {
+                InstancePreview(
+                    url = viewModel.instance,
+                    nodeInfo = it
                 )
-
-                if (viewModel.didError) {
-                    Text(
-                        text = getString(R.string.msg_invalid_instance),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.widthIn(max = 300.dp)
-                    )
-                }
-
-                Button(
-                    onClick = { viewModel.login(ctx) },
-                    enabled = viewModel.nodeInfo != null
-                ) {
-                    Text(getString(R.string.action_login))
-                }
             }
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        OutlinedTextField(
+            value = viewModel.instance,
+            onValueChange = {
+                viewModel.instance = it
+                lastTyped = 0L
+                viewModel.nodeInfo = null
+            },
+            label = { Text(getString(R.string.label_instance)) },
+            placeholder = { Text("mastodon.online") },
+            isError = viewModel.didError,
+            singleLine = true
+        )
+
+        if (viewModel.didError) {
+            Text(
+                text = getString(R.string.msg_invalid_instance),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.widthIn(max = 300.dp)
+            )
+        }
+
+        Button(
+            onClick = { viewModel.login(ctx) },
+            enabled = viewModel.nodeInfo != null && viewModel.instanceIsMastodon
+        ) {
+            Text(getString(R.string.action_login))
         }
     }
 
