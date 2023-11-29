@@ -15,14 +15,14 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import xyz.wingio.dimett.ui.screens.explore.ExploreTab
 import xyz.wingio.dimett.ui.screens.feed.FeedTab
 import xyz.wingio.dimett.ui.screens.main.LocalPager
-import xyz.wingio.dimett.ui.screens.messages.MessagesTab
+import xyz.wingio.dimett.ui.screens.profile.ProfileTab
 import xyz.wingio.dimett.ui.screens.notifications.NotificationsTab
 
 enum class RootTab(val tab: Tab) {
     FEED(FeedTab()),
     EXPLORE(ExploreTab()),
     NOTIFICATIONS(NotificationsTab()),
-    MESSAGES(MessagesTab()),
+    PROFILE(ProfileTab()),
 }
 
 tailrec fun Navigator.navigate(screen: Screen) {
@@ -42,7 +42,7 @@ fun Tab.TabOptions(
     iconSelected: ImageVector
 ): TabOptions {
     val pager = LocalPager.currentOrThrow
-    val selected = RootTab.values()[pager.currentPage].tab == this
+    val selected = RootTab.entries[pager.currentPage].tab == this
 
     return TabOptions(
         0u,

@@ -1,4 +1,4 @@
-package xyz.wingio.dimett.ui.screens.messages
+package xyz.wingio.dimett.ui.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Mail
-import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import xyz.wingio.dimett.R
@@ -24,13 +25,7 @@ import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.utils.TabOptions
 import xyz.wingio.dimett.utils.getString
 
-class MessagesTab : Tab {
-    override val options: TabOptions
-        @Composable get() = TabOptions(
-            R.string.title_messages,
-            icon = Icons.Outlined.Mail,
-            iconSelected = Icons.Filled.Mail
-        )
+open class ProfileScreen: Screen {
 
     @Composable
     override fun Content() {
@@ -53,5 +48,16 @@ class MessagesTab : Tab {
             )
         }
     }
+
+}
+
+class ProfileTab : ProfileScreen(), Tab {
+
+    override val options: TabOptions
+        @Composable get() = TabOptions(
+            R.string.title_profile,
+            icon = Icons.Outlined.Person,
+            iconSelected = Icons.Filled.Person
+        )
 
 }

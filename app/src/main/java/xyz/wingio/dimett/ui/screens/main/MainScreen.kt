@@ -1,15 +1,13 @@
 package xyz.wingio.dimett.ui.screens.main
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -42,6 +40,7 @@ class MainScreen : Screen {
     @Composable
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
     private fun Screen() {
+        val viewModel: MainViewModel = getScreenModel()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         val pagerState = rememberPagerState()
         val coroutineScope = rememberCoroutineScope()
@@ -58,15 +57,15 @@ class MainScreen : Screen {
             LocalPager provides pagerState
         ) {
             Scaffold(
-                bottomBar = { TabBar(pagerState) },
-                topBar = { TopBar(RootTab.values()[pagerState.currentPage].tab, scrollBehavior) }
+                bottomBar = { TabBar(pagerState, viewModel) },
+                topBar = { TopBar(RootTab.entries[pagerState.currentPage].tab, scrollBehavior) }
             ) { pv ->
                 HorizontalPager(
-                    count = RootTab.values().size,
+                    count = RootTab.entries.size,
                     state = pagerState,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    val tab = RootTab.values()[it]
+                    val tab = RootTab.entries[it]
 
                     Box(
                         Modifier
@@ -85,28 +84,19 @@ class MainScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     private fun TopBar(
         tab: Tab,
-        scrollBehavior: TopAppBarScrollBehavior,
-        viewModel: MainViewModel = getScreenModel()
+        scrollBehavior: TopAppBarScrollBehavior
     ) {
         LargeTopAppBar(
             title = { Text(tab.options.title) },
             navigationIcon = {
-                Row {
-                    Spacer(Modifier.width(8.dp))
-                    AsyncImage(
-                        model = viewModel.account?.avatar,
-                        contentDescription = stringResource(
-                            R.string.cd_avatar,
-                            viewModel.account?.username ?: ""
-                        ),
-                        modifier = Modifier
-                            .size(33.dp)
-                            .clip(CircleShape)
-                            .clickable { }
+                IconButton(
+                    onClick = { /* TODO: Open some menu */ }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = stringResource(R.string.action_open_menu)
                     )
-                    Spacer(Modifier.width(12.dp))
                 }
-
             },
             scrollBehavior = scrollBehavior
         )
@@ -115,26 +105,40 @@ class MainScreen : Screen {
     @OptIn(ExperimentalPagerApi::class)
     @Composable
     private fun TabBar(
-        pagerState: PagerState
+        pagerState: PagerState,
+        viewModel: MainViewModel
     ) {
-        val tab = RootTab.values()[pagerState.currentPage].tab
+        val tab = RootTab.entries[pagerState.currentPage].tab
         val coroutineScope = rememberCoroutineScope()
 
         NavigationBar {
-            RootTab.values().forEach {
+            RootTab.entries.forEach {
                 NavigationBarItem(
                     selected = tab == it.tab,
                     onClick = {
-                        val page = RootTab.values().indexOf(it)
+                        val page = RootTab.entries.indexOf(it)
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(page)
                         }
                     },
                     icon = {
-                        Icon(
-                            painter = it.tab.options.icon!!,
-                            contentDescription = it.tab.options.title
-                        )
+                        if(it == RootTab.PROFILE && viewModel.account != null) {
+                            AsyncImage(
+                                model = viewModel.account!!.avatar,
+                                contentDescription = stringResource(
+                                    R.string.cd_avatar,
+                                    viewModel.account!!.username
+                                ),
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(CircleShape)
+                            )
+                        } else {
+                            Icon(
+                                painter = it.tab.options.icon!!,
+                                contentDescription = it.tab.options.title
+                            )
+                        }
                     },
                     label = { Text(text = it.tab.options.title) }
                 )

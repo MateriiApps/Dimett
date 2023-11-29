@@ -5,6 +5,7 @@
     <string name="action_vote">Vote</string>
     <string name="action_retry">Retry</string>
     <string name="action_share">Share</string>
+    <string name="action_open_menu">Open menu</string>
 
     <string name="label_instance">Instance</string>
 
@@ -15,6 +16,7 @@
     <string name="title_explore">Explore</string>
     <string name="title_inbox">Inbox</string>
     <string name="title_messages">Messages</string>
+    <string name="title_profile">Profile</string>
 
     <string name="cd_avatar">%1$s\'s avatar</string>
     <string name="cd_boosted">Boosted</string>
