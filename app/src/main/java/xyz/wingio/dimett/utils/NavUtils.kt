@@ -2,19 +2,19 @@ package xyz.wingio.dimett.utils
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.google.accompanist.pager.ExperimentalPagerApi
 import xyz.wingio.dimett.ui.screens.explore.ExploreTab
 import xyz.wingio.dimett.ui.screens.feed.FeedTab
-import xyz.wingio.dimett.ui.screens.main.LocalPager
 import xyz.wingio.dimett.ui.screens.profile.ProfileTab
 import xyz.wingio.dimett.ui.screens.notifications.NotificationsTab
 
@@ -33,16 +33,19 @@ tailrec fun Navigator.navigate(screen: Screen) {
     else parent!!.navigate(screen)
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
+val LocalPagerState = compositionLocalOf<PagerState> { error("No PagerState provided") }
+
 @Composable
 @SuppressLint("ComposableNaming")
+@OptIn(ExperimentalFoundationApi::class)
 fun Tab.TabOptions(
     @StringRes name: Int,
     icon: ImageVector,
     iconSelected: ImageVector
 ): TabOptions {
-    val pager = LocalPager.currentOrThrow
-    val selected = RootTab.entries[pager.currentPage].tab == this
+    val pagerState = LocalPagerState.current
+    val selected = RootTab.entries[pagerState.currentPage].tab == this
 
     return TabOptions(
         0u,

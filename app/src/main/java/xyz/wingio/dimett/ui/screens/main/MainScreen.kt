@@ -1,17 +1,20 @@
 package xyz.wingio.dimett.ui.screens.main
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,14 +25,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import coil.compose.AsyncImage
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import xyz.wingio.dimett.R
 import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.ui.viewmodels.main.MainViewModel
+import xyz.wingio.dimett.utils.LocalPagerState
 import xyz.wingio.dimett.utils.RootTab
 
 class MainScreen : Screen {
@@ -38,12 +38,14 @@ class MainScreen : Screen {
     override fun Content() = Screen()
 
     @Composable
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
     private fun Screen() {
         val viewModel: MainViewModel = getScreenModel()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-        val pagerState = rememberPagerState()
         val coroutineScope = rememberCoroutineScope()
+        val pagerState = rememberPagerState {
+            RootTab.entries.size
+        }
 
         BackHandler(
             enabled = pagerState.currentPage != 0
@@ -54,14 +56,13 @@ class MainScreen : Screen {
         }
 
         CompositionLocalProvider(
-            LocalPager provides pagerState
+            LocalPagerState provides pagerState
         ) {
             Scaffold(
                 bottomBar = { TabBar(pagerState, viewModel) },
                 topBar = { TopBar(RootTab.entries[pagerState.currentPage].tab, scrollBehavior) }
             ) { pv ->
                 HorizontalPager(
-                    count = RootTab.entries.size,
                     state = pagerState,
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -102,8 +103,8 @@ class MainScreen : Screen {
         )
     }
 
-    @OptIn(ExperimentalPagerApi::class)
     @Composable
+    @OptIn(ExperimentalFoundationApi::class)
     private fun TabBar(
         pagerState: PagerState,
         viewModel: MainViewModel
@@ -147,6 +148,3 @@ class MainScreen : Screen {
     }
 
 }
-
-@OptIn(ExperimentalPagerApi::class)
-val LocalPager = compositionLocalOf<PagerState?> { null }

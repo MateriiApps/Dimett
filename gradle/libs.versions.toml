@@ -21,7 +21,6 @@ simpleast-core = "master-SNAPSHOT"
 voyager = "1.0.0-rc07"
 
 [libraries]
-accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
@@ -61,7 +60,7 @@ voyager-tab-navigator = { group = "cafe.adriel.voyager", name = "voyager-tab-nav
 voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
 
 [bundles]
-accompanist = ["accompanist-systemuicontroller", "accompanist-pager", "accompanist-pager-indicators"]
+accompanist = ["accompanist-systemuicontroller", "accompanist-pager-indicators"]
 androidx = ["core-ktx", "androidx-browser", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "androidx-paging-compose", "androidx-emoji2"]
 coil = ["coil-compose", "coil", "coil-gif"]
 compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3", "compose-material-icons-extended"]
