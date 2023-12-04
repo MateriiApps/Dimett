@@ -1,6 +1,7 @@
 package xyz.wingio.dimett.utils
 
 import android.content.Context
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
@@ -13,7 +14,7 @@ object EmojiUtils : KoinComponent {
 
     val emojis by lazy {
         val _json = String(context.assets.open("emoji.json").readBytes())
-        json.decodeFromString<Map<String, String>>(_json)
+        json.decodeFromString<EmojiJson>(_json).emoji
     }
 
     val regex by lazy {
@@ -24,3 +25,8 @@ object EmojiUtils : KoinComponent {
         })"
     }
 }
+
+@Serializable
+data class EmojiJson(
+    val emoji: Map<String, String>
+)
