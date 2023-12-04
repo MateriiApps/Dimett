@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.bundles.voyager)
 
     implementation(libs.pullrefresh)
+    implementation(libs.syntakts)
 
     ksp(libs.androidx.room.compiler)
 }

@@ -17,7 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.R
-import xyz.wingio.dimett.ast.Renderer
+import xyz.wingio.dimett.ast.DefaultSyntakts
+import xyz.wingio.dimett.ast.EmojiSyntakts
+import xyz.wingio.dimett.ast.render
 import xyz.wingio.dimett.rest.dto.post.Post
 import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.ui.widgets.attachments.Attachments
@@ -70,12 +72,11 @@ fun Post(
         ) {
             if (post.boosted != null) {
                 val str = stringResource(R.string.post_user_boosted, post.author.displayName)
-                val text = Renderer.render(str, post.author.emojis.toEmojiMap(), emptyMap()).build()
 
                 PostInfoBar(
                     icon = Icons.Outlined.Repeat,
                     iconDescription = R.string.cd_boosted,
-                    text = text
+                    text = EmojiSyntakts.render(str, post.author.emojis.toEmojiMap(), emptyMap())
                 )
             }
 
@@ -93,33 +94,32 @@ fun Post(
                     it.id == repliedTo
                 }?.let { mention ->
                     Text(
-                        text = getString(R.string.post_replying_to, mention.username),
+                        text = getString(R.string.post_replying_to, mention.username) {
+                            if (it == "onUserClick") onMentionClick(mention.id)
+                        },
                         style = MaterialTheme.typography.labelMedium,
                         color = LocalContentColor.current.copy(alpha = 0.5f)
-                    ) {
-                        if (it == "onUserClick") onMentionClick(mention.id)
-                    }
+                    )
                 }
             }
 
             _post.content?.let {
                 val content = processPostContent(_post)
                 if (content.isNotEmpty()) {
-                    val text = Renderer.render(
-                        content,
-                        _post.emojis.toEmojiMap(),
-                        _post.mentions.toMentionMap()
-                    ).build()
                     Text(
-                        text = text,
+                        text = DefaultSyntakts.render(
+                            content,
+                            _post.emojis.toEmojiMap(),
+                            _post.mentions.toMentionMap()
+                        ) { annotation ->
+                            val (key, value) = annotation.split(':')
+                            when (key) {
+                                "mention" -> onMentionClick(value)
+                                "hashtag" -> onHashtagClick(value)
+                            }
+                        },
                         style = MaterialTheme.typography.bodyMedium
-                    ) { annotation ->
-                        val (key, value) = annotation.split(':')
-                        when (key) {
-                            "mention" -> onMentionClick(value)
-                            "hashtag" -> onHashtagClick(value)
-                        }
-                    }
+                    )
                 }
             }
 

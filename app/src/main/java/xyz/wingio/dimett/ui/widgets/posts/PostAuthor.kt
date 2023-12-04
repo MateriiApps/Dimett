@@ -11,7 +11,6 @@ import androidx.compose.material.icons.outlined.SmartToy
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import xyz.wingio.dimett.R
-import xyz.wingio.dimett.ast.Renderer
+import xyz.wingio.dimett.ast.EmojiSyntakts
+import xyz.wingio.dimett.ast.render
 import xyz.wingio.dimett.ui.components.BadgedItem
 import xyz.wingio.dimett.ui.components.Text
 
@@ -33,8 +33,6 @@ fun PostAuthor(
     bot: Boolean,
     onAvatarClick: () -> Unit = {}
 ) {
-    val authorText = Renderer.render(displayName, emojis, emptyMap()).build()
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -57,12 +55,12 @@ fun PostAuthor(
                     .clickable(onClick = onAvatarClick)
             )
         }
+
         Column {
-            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
-                Text(
-                    text = authorText
-                )
-            }
+            Text(
+                text = EmojiSyntakts.render(displayName, emojis, emptyMap()),
+                style = MaterialTheme.typography.labelLarge
+            )
             Text(
                 text = "@$acct",
                 style = MaterialTheme.typography.labelMedium,

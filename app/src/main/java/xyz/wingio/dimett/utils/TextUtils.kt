@@ -6,63 +6,87 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import xyz.wingio.dimett.ast.Renderer
+import xyz.wingio.dimett.ast.StringSyntakts
+import xyz.wingio.dimett.ast.rendercontext.DefaultRenderContext
+import xyz.wingio.syntakts.Syntakts
+import xyz.wingio.syntakts.compose.rememberRendered
 
 @Composable
-fun inlineContent(): Map<String, InlineTextContent> {
-    val emoteSize = (LocalTextStyle.current.fontSize.value + 2f).sp
+fun inlineContent(
+    textStyle: TextStyle = LocalTextStyle.current
+): Map<String, InlineTextContent> {
+    val emoteSize = remember(textStyle) { (textStyle.fontSize.value + 2f).sp }
     val ctx = LocalContext.current
 
-    return mapOf(
-        "emote" to InlineTextContent(
-            placeholder = Placeholder(
-                width = emoteSize,
-                height = (emoteSize.value - 2f).sp,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
-            ),
-        ) { emoteUrl ->
-            AsyncImage(
-                model = emoteUrl,
-                contentDescription = null,
-                modifier = Modifier.size(emoteSize.value.dp)
-            )
-        },
-        "emoji" to InlineTextContent(
-            placeholder = Placeholder(
-                width = emoteSize,
-                height = (emoteSize.value - 2f).sp,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
-            ),
-        ) { emoji ->
-            val emojiImage = BitmapDrawable(EmojiUtils.emojis[emoji]?.let {
-                ctx.getResId(it)
-            }?.let { ctx.resources.openRawResource(it) }).bitmap.asImageBitmap()
-            Image(
-                bitmap = emojiImage,
-                contentDescription = null,
-                modifier = Modifier.size(emoteSize.value.dp)
-            )
-        },
-    )
+    return remember(emoteSize, ctx) {
+        mapOf(
+            "emote" to InlineTextContent(
+                placeholder = Placeholder(
+                    width = emoteSize,
+                    height = (emoteSize.value - 2f).sp,
+                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                ),
+            ) { emoteUrl ->
+                AsyncImage(
+                    model = emoteUrl,
+                    contentDescription = null,
+                    modifier = Modifier.size(emoteSize.value.dp)
+                )
+            },
+
+            "emoji" to InlineTextContent(
+                placeholder = Placeholder(
+                    width = emoteSize,
+                    height = (emoteSize.value - 2f).sp,
+                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                ),
+            ) { emoji ->
+                val emojiImage = BitmapDrawable(EmojiUtils.emojis[emoji]?.let {
+                    ctx.getResId(it)
+                }?.let { ctx.resources.openRawResource(it) }).bitmap.asImageBitmap()
+
+                Image(
+                    bitmap = emojiImage,
+                    contentDescription = null,
+                    modifier = Modifier.size(emoteSize.value.dp)
+                )
+            },
+        )
+    }
 }
 
 
 @Composable
 fun getString(
     @StringRes string: Int,
-    vararg args: Any
+    vararg args: Any,
+    syntakts: Syntakts<DefaultRenderContext> = StringSyntakts,
+    actionHandler: (String) -> Unit = {}
 ): AnnotatedString {
     val _string = stringResource(string, *args)
-    return Renderer.renderString(_string).build()
+    return syntakts.rememberRendered(
+        text = _string,
+        context = DefaultRenderContext(
+            emojiMap = emptyMap(),
+            mentionMap = emptyMap(),
+            linkColor = MaterialTheme.colorScheme.primary,
+            uriHandler = LocalUriHandler.current,
+            clickActionHandler = actionHandler
+        )
+    )
 }

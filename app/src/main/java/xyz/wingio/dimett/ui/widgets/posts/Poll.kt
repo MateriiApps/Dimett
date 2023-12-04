@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,7 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.R
-import xyz.wingio.dimett.ast.Renderer
+import xyz.wingio.dimett.ast.EmojiSyntakts
+import xyz.wingio.dimett.ast.render
 import xyz.wingio.dimett.rest.dto.Poll
 import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.utils.getString
@@ -50,7 +50,6 @@ fun Poll(
     ) {
         for (i in poll.options.indices) {
             val option = poll.options[i]
-            val text = Renderer.render(option.title, emojiMap, emptyMap()).build()
             val voted = selected.contains(i)
             val vote = {
                 if (!poll.multiple) {
@@ -79,15 +78,15 @@ fun Poll(
             ) {
                 ProvideTextStyle(MaterialTheme.typography.bodyLarge) {
                     Text(
-                        text = text,
+                        text = EmojiSyntakts.render(option.title, emojiMap, emptyMap()),
                         maxLines = 1,
                         modifier = Modifier
                             .basicMarquee()
                             .fillMaxWidth()
-                            .weight(0.75f)
+                            .weight(1f)
                     )
                 }
-                Spacer(modifier = Modifier.weight(1f))
+
                 RadioButton(
                     selected = voted,
                     onClick = {
@@ -99,6 +98,7 @@ fun Poll(
                 )
             }
         }
+
         OutlinedButton(
             onClick = {
                 onVote(poll.id, selected)
