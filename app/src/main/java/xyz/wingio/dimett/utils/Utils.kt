@@ -51,12 +51,20 @@ fun getLogger(): Logger = GlobalContext.get().get(named("default"))
 
 fun String.toAnnotatedString() = AnnotatedString(this)
 
+/**
+ * Removes the mention for the replied user from the start of the text
+ */
 fun processPostContent(post: Post): String {
     val repliedTo = post.mentions.firstOrNull { mention ->
         mention.id == post.userRepliedTo
     }
     return post.content?.plain?.run {
-        if (repliedTo != null) replaceFirst("@${repliedTo.username} ", "") else this
+        if (repliedTo != null)
+            this
+                .replaceFirst("@${repliedTo.username} ", "")
+                .replaceFirst("@${repliedTo.acct}", "")
+        else
+            this
     } ?: ""
 }
 
