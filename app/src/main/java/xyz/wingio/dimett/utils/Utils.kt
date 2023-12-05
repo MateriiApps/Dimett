@@ -81,7 +81,7 @@ fun processPostContent(post: Post): String {
         if (repliedTo != null)
             this
                 .replaceFirst("@${repliedTo.username} ", "") // @username
-                .replaceFirst("@${repliedTo.acct}", "") // @username@instance.url
+                .replaceFirst("@${repliedTo.acct} ", "") // @username@instance.url
         else
             this
     } ?: ""

@@ -10,7 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-// Credit to Xinto (github.com/X1nto)
+/**
+ * Overlays a [badge] component on top of some [content] with a cutout
+ *
+ * @param badge The component to display over the content
+ * @param modifier Modifiers for the BadgedItem
+ * @param badgeAlignment How to align the badge relative to the content
+ */
+// Credit to Xinto (https://github.com/X1nto)
 @Composable
 fun BadgedItem(
     badge: @Composable (() -> Unit)?,

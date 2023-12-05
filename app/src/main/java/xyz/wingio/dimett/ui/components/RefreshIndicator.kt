@@ -10,6 +10,12 @@ import androidx.compose.ui.unit.dp
 import dev.materii.pullrefresh.PullRefreshIndicator
 import dev.materii.pullrefresh.PullRefreshState
 
+/**
+ * Wrapper around [PullRefreshIndicator] that adds Material 3 theming
+ *
+ * @param refreshing A boolean representing whether a refresh is occurring
+ * @param state The [PullRefreshState] which controls where and how the indicator will be drawn.
+ */
 @Composable
 fun BoxScope.RefreshIndicator(
     refreshing: Boolean,

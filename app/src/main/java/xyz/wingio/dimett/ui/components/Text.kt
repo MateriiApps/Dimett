@@ -20,6 +20,9 @@ import xyz.wingio.dimett.utils.inlineContent
 import xyz.wingio.dimett.utils.toAnnotatedString
 import xyz.wingio.syntakts.compose.material3.clickable.ClickableText
 
+/**
+ * Custom version of the Material 3 Text component that lets us deal with styled text much more easily
+ */
 @Composable
 fun Text(
     text: String,
@@ -55,6 +58,9 @@ fun Text(
     modifier = modifier
 )
 
+/**
+ * Custom version of the Material 3 Text component that lets us deal with styled text much more easily
+ */
 @Composable
 fun Text(
     text: AnnotatedString,
