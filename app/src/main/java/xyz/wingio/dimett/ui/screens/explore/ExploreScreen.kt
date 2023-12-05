@@ -24,6 +24,7 @@ import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.utils.TabOptions
 import xyz.wingio.dimett.utils.getString
 
+// TODO: Implement
 class ExploreTab : Tab {
     override val options: TabOptions
         @Composable get() = TabOptions(

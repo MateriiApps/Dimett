@@ -44,12 +44,8 @@ import kotlin.time.Duration.Companion.seconds
 class LoginScreen : Screen {
 
     @Composable
-    override fun Content() = Screen()
-
-    @Composable
-    private fun Screen(
-        viewModel: LoginViewModel = getScreenModel()
-    ) {
+    override fun Content() {
+        val viewModel: LoginViewModel = getScreenModel()
         val navigator = LocalNavigator.currentOrThrow
 
         IntentHandler { intent ->
@@ -75,6 +71,9 @@ class LoginScreen : Screen {
         }
     }
 
+    /**
+     * The main body of this screen
+     */
     @Composable
     private fun ColumnScope.Login(
         viewModel: LoginViewModel
@@ -123,7 +122,7 @@ class LoginScreen : Screen {
                 viewModel.nodeInfo = null
             },
             label = { Text(getString(R.string.label_instance)) },
-            placeholder = { Text("mastodon.online") },
+            placeholder = { Text("mastodon.online") }, // TODO: Maybe replace with random instance from some list?
             isError = viewModel.didError,
             singleLine = true
         )
@@ -140,7 +139,7 @@ class LoginScreen : Screen {
 
         Button(
             onClick = { viewModel.login(ctx) },
-            enabled = viewModel.nodeInfo != null && viewModel.instanceIsMastodon
+            enabled = viewModel.nodeInfo != null && viewModel.instanceIsMastodon // For now we only support the Mastodon api
         ) {
             Text(getString(R.string.action_login))
         }

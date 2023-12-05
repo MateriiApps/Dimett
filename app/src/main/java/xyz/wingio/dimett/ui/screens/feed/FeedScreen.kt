@@ -39,6 +39,9 @@ import xyz.wingio.dimett.ui.widgets.posts.Post
 import xyz.wingio.dimett.utils.TabOptions
 import xyz.wingio.dimett.utils.getString
 
+/**
+ * Shows the home timeline for the current user
+ */
 class FeedTab : Tab {
     override val options: TabOptions
         @Composable get() = TabOptions(
@@ -48,17 +51,14 @@ class FeedTab : Tab {
         )
 
     @Composable
-    override fun Content() = Screen()
-
-    @Composable
-    private fun Screen(
-        viewModel: FeedViewModel = getScreenModel()
-    ) {
+    override fun Content(){
+        val viewModel: FeedViewModel = getScreenModel()
         val posts = viewModel.posts.collectAsLazyPagingItems()
         val refreshing = posts.loadState.refresh == LoadState.Loading
         val pullRefreshState =
             rememberPullRefreshState(refreshing = refreshing, onRefresh = { posts.refresh() })
 
+        // UI has to be wrapped in a Box in order to display the RefreshIndicator
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,6 +69,7 @@ class FeedTab : Tab {
                 modifier = Modifier.fillMaxSize()
             ) {
                 if (posts.itemCount == 0 && !refreshing) {
+                    // Display this when no posts could be loaded
                     item {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -96,7 +97,7 @@ class FeedTab : Tab {
                     contentType = posts.itemContentType()
                 ) { post ->
                     posts[post]?.let {
-                        val realPost = viewModel.modifiedPosts[it.id] ?: it
+                        val realPost = viewModel.modifiedPosts[it.id] ?: it // A version of the post with local changes (such as boost or favorited status)
                         Post(
                             post = realPost,
                             onAvatarClick = { authorId ->
@@ -124,6 +125,7 @@ class FeedTab : Tab {
                     }
                 }
                 if (posts.loadState.append is LoadState.Error) {
+                    // Display at the bottom of the feed when receiving an error while trying to load more
                     item {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -138,6 +140,7 @@ class FeedTab : Tab {
                     }
                 }
                 if (posts.loadState.append == LoadState.Loading) {
+                    // Show a little loading indicator if the user reaches the bottom before we could paginate
                     item {
                         Box(
                             contentAlignment = Alignment.Center,
