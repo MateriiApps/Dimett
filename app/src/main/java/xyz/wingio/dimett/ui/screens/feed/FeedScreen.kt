@@ -107,7 +107,7 @@ class FeedTab : Tab {
 
                             },
                             onBoostClick = { postId ->
-                                viewModel.toggleBoost(postId, realPost.hasBoosted ?: false, posts)
+                                viewModel.toggleBoost(postId, realPost.hasBoosted ?: false)
                             },
                             onFavoriteClick = { postId ->
                                 viewModel.toggleFavorite(postId, realPost.favorited ?: false)
