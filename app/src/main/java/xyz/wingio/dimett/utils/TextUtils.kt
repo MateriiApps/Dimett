@@ -35,7 +35,7 @@ import xyz.wingio.syntakts.compose.rememberRendered
 fun inlineContent(
     textStyle: TextStyle = LocalTextStyle.current
 ): Map<String, InlineTextContent> {
-    val emoteSize = remember(textStyle) { (textStyle.fontSize.value + 2f).sp }
+    val emoteSize = remember(textStyle) { (textStyle.fontSize.value + 2f).sp } // Make emojis a little bigger than the surrounding text
     val ctx = LocalContext.current
 
     return remember(emoteSize, ctx) {
@@ -61,9 +61,16 @@ fun inlineContent(
                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
                 ),
             ) { emoji ->
-                val emojiImage = BitmapDrawable(EmojiUtils.emojis[emoji]?.let {
-                    ctx.getResId(it)
-                }?.let { ctx.resources.openRawResource(it) }).bitmap.asImageBitmap()
+                val emojiImage = BitmapDrawable(
+                    /* res = */ ctx.resources,
+                    /* is = */ EmojiUtils.emojis[emoji]
+                        ?.let { rawResourceName ->
+                            ctx.getResId(rawResourceName)
+                        }
+                        ?.let { rawResId ->
+                            ctx.resources.openRawResource(rawResId)
+                        }
+                ).bitmap.asImageBitmap()
 
                 Image(
                     bitmap = emojiImage,
@@ -93,6 +100,7 @@ fun getString(
     actionHandler: (actionName: String) -> Unit = {}
 ): AnnotatedString {
     val _string = stringResource(string, *args)
+
     return syntakts.rememberRendered(
         text = _string,
         context = DefaultRenderContext(

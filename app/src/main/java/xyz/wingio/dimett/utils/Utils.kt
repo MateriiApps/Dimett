@@ -76,11 +76,12 @@ fun processPostContent(post: Post): String {
     val repliedTo = post.mentions.firstOrNull { mention ->
         mention.id == post.userRepliedTo
     }
+
     return post.content?.plain?.run {
         if (repliedTo != null)
             this
-                .replaceFirst("@${repliedTo.username} ", "")
-                .replaceFirst("@${repliedTo.acct}", "")
+                .replaceFirst("@${repliedTo.username} ", "") // @username
+                .replaceFirst("@${repliedTo.acct}", "") // @username@instance.url
         else
             this
     } ?: ""

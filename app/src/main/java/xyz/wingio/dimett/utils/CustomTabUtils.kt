@@ -22,9 +22,9 @@ private val Context.defaultBrowserPackage: String?
                 .queryIntentActivities(
                     Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://")),
                     0
-                )
-                .firstOrNull()
-                ?.activityInfo?.packageName
+                ) // All apps that can open `http://` uris (Usually only browsers)
+                .firstOrNull() // The default browser app is usually first
+                ?.activityInfo?.packageName // We only need the package name
 
             mDefaultBrowserPackage
         } else mDefaultBrowserPackage

@@ -20,8 +20,8 @@ object EmojiUtils : KoinComponent {
      * Parses `assets/emoji.json` and returns a map of emoji codepoints to the Twemoji versions resource name located in `res/raw`
      */
     val emojis by lazy {
-        val _json = String(context.assets.open("emoji.json").readBytes())
-        json.decodeFromString<EmojiJson>(_json).emoji
+        val _json = String(context.assets.open("emoji.json").readBytes()) // Read emoji.json to a String
+        json.decodeFromString<EmojiJson>(_json).emoji // Decode the string into a more useful format
     }
 
     /**
@@ -31,9 +31,11 @@ object EmojiUtils : KoinComponent {
      */
     val regex by lazy {
         "^(${
-            emojis.keys.sortedByDescending { it.length }.joinToString("|") { emoji ->
-                Pattern.quote(emoji)
-            }
+            emojis.keys
+                .sortedByDescending { it.length } // Ensure that we match emoji with modifiers (such as skin tone) before the default version of the emoji
+                .joinToString("|") { emoji ->
+                    Pattern.quote(emoji)
+                }
         })"
     }
 
