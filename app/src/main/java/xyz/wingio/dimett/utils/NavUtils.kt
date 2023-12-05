@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -18,6 +19,9 @@ import xyz.wingio.dimett.ui.screens.feed.FeedTab
 import xyz.wingio.dimett.ui.screens.profile.ProfileTab
 import xyz.wingio.dimett.ui.screens.notifications.NotificationsTab
 
+/**
+ * Tabs that appear on the [main screen][xyz.wingio.dimett.ui.screens.main.MainScreen]
+ */
 enum class RootTab(val tab: Tab) {
     FEED(FeedTab()),
     EXPLORE(ExploreTab()),
@@ -25,17 +29,34 @@ enum class RootTab(val tab: Tab) {
     PROFILE(ProfileTab()),
 }
 
+/**
+ * Safely navigate to the given [screen] from the root [Navigator]
+ *
+ * @param screen Where to navigate
+ */
 tailrec fun Navigator.navigate(screen: Screen) {
-    return if (parent == null && items.firstOrNull { it.key == screen.key } == null) try {
+    return if (
+        parent == null // Is the root navigator
+        && items.firstOrNull { it.key == screen.key } == null // Doesn't already have the screen in the navigation stack
+    ) try {
         push(screen)
-    } catch (_: Throwable) {
-    }
+    } catch (_: Throwable) {}
     else parent!!.navigate(screen)
 }
 
+/**
+ * [CompositionLocal] instance for [PagerState]
+ */
 @OptIn(ExperimentalFoundationApi::class)
 val LocalPagerState = compositionLocalOf<PagerState> { error("No PagerState provided") }
 
+/**
+ * Convenience function for providing tab options with alternating selected and unselected icons
+ *
+ * @param name String resource id for the name of this tab
+ * @param icon Icon to be shown when the tab is not selected (Usually outlined)
+ * @param iconSelected Icon to be shown when the tab is selected (Usually filled)
+ */
 @Composable
 @SuppressLint("ComposableNaming")
 @OptIn(ExperimentalFoundationApi::class)

@@ -21,6 +21,7 @@ class Dimett : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // Add gif support (https://coil-kt.github.io/coil/gifs/)
         val imageLoader = ImageLoader.Builder(this)
             .components {
                 if (Build.VERSION.SDK_INT >= 28) {
@@ -46,7 +47,6 @@ class Dimett : Application() {
                 loggerModule
             )
         }
-
     }
 
 }
