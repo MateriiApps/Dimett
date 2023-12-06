@@ -11,6 +11,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,8 +30,20 @@ import xyz.wingio.dimett.utils.shareText
 import xyz.wingio.dimett.utils.toEmojiMap
 import xyz.wingio.dimett.utils.toMentionMap
 
-@Suppress("LocalVariableName")
+/**
+ * Post displayed in a feed
+ *
+ * @param post Information about the post
+ * @param onAvatarClick Called when the authors avatar is clicked
+ * @param onMentionClick Called when any mention (@user or @user@domain) is clicked
+ * @param onHashtagClick Called when a hashtag (#tag) is clicked
+ * @param onReplyClick Called when the reply button is pressed
+ * @param onFavoriteClick Called when the favorite button is pressed
+ * @param onBoostClick Called when the boost button is pressed
+ * @param onVotedInPoll Called when the user submits their selection in a poll
+ */
 @Composable
+@Suppress("LocalVariableName")
 fun Post(
     post: Post,
     onAvatarClick: (String) -> Unit = {},
@@ -42,13 +55,15 @@ fun Post(
     onVotedInPoll: (String, List<Int>) -> Unit = { _, _ -> }
 ) {
     val ctx = LocalContext.current
-    val _post = post.boosted ?: post
-    val timeString = DateUtils.getRelativeTimeSpanString(
-        /* time = */ post.createdAt.toEpochMilliseconds(),
-        /* now = */ System.currentTimeMillis(),
-        /* minResolution = */ 0L,
-        /* flags = */ DateUtils.FORMAT_ABBREV_ALL
-    ).toString()
+    val _post = post.boosted ?: post // The actually displayed post, not the same if its a boost
+    val timeString = remember(post.createdAt) {
+        DateUtils.getRelativeTimeSpanString(
+            /* time = */ post.createdAt.toEpochMilliseconds(),
+            /* now = */ System.currentTimeMillis(),
+            /* minResolution = */ 0L,
+            /* flags = */ DateUtils.FORMAT_ABBREV_ALL
+        ).toString()
+    }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -137,7 +152,7 @@ fun Post(
             }
 
             _post.card?.let {
-                if (_post.media.isEmpty()) {
+                if (_post.media.isEmpty()) { // We don't want to show both the media and card at the same time, too big
                     Card(
                         card = it
                     )

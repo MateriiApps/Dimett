@@ -24,6 +24,16 @@ import xyz.wingio.dimett.ast.render
 import xyz.wingio.dimett.ui.components.BadgedItem
 import xyz.wingio.dimett.ui.components.Text
 
+/**
+ * Displays the avatar along with display name and username for a post's author
+ *
+ * @param avatarUrl Url pointing to the authors avatar
+ * @param displayName Authors display name
+ * @param acct The username of the author (@user or @user@example.social)
+ * @param emojis The emojis present in the display name
+ * @param bot Whether or not the author is an automated account
+ * @param onAvatarClick Callback for when the avatar is clicked
+ */
 @Composable
 fun PostAuthor(
     avatarUrl: String,

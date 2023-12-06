@@ -33,6 +33,19 @@ import xyz.wingio.dimett.R
 import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.utils.formatNumber
 
+/**
+ * Set of buttons and their interaction counts
+ *
+ * @param replies Number of replies to the post
+ * @param favorites Number of people that favorited this post
+ * @param boosts Number of people that boosted this post
+ * @param boosted Whether the current user has boosted this post
+ * @param favorited Whether the current user has favorited this post
+ * @param onReplyClick Called when the reply button is pressed
+ * @param onFavoriteClick Called when the favorite button is pressed
+ * @param onBoostClick Called when the boost button is pressed
+ * @param onShareClick Called when the share button is pressed
+ */
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 fun PostButtons(
@@ -78,6 +91,14 @@ fun PostButtons(
     }
 }
 
+/**
+ * Version of [TextButton][androidx.compose.material3.TextButton] with an icon
+ *
+ * @param icon Icon displayed next to the label
+ * @param contentDescription Describes the button for screen readers
+ * @param text Label to be displayed in the button
+ * @param onClick Called when the button is clicked
+ */
 @Composable
 fun PostButton(
     icon: ImageVector,

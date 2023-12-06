@@ -43,6 +43,9 @@ fun Card(
     }
 }
 
+/**
+ * Standard link card, displays the thumbnail image, the title, and a description
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LinkCard(
@@ -51,8 +54,9 @@ fun LinkCard(
     val ctx = LocalContext.current
     val uriHandler = LocalUriHandler.current
     var size by remember {
-        mutableStateOf(Size.ORIGINAL)
+        mutableStateOf(Size.ORIGINAL) // Position is chosen based on thumbnail size
     }
+
     val imageRequest = remember {
         ImageRequest.Builder(ctx)
             .error(R.drawable.img_preview_placeholder)
@@ -65,7 +69,7 @@ fun LinkCard(
             }
             .build()
     }
-    val isBig = size.width.pxOrElse { 0 } > size.height.pxOrElse { 0 }
+    val isBig = size.width.pxOrElse { 0 } > size.height.pxOrElse { 0 } // Checks if the width is larger than the height (Is in landscape)
     val aspectRatio = size.width.pxOrElse { 0 }.toFloat() / size.height.pxOrElse { 0 }.toFloat()
 
     ElevatedCard(
@@ -75,7 +79,7 @@ fun LinkCard(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        if (isBig) {
+        if (isBig) { // Landscape images get placed above the title and description
             AsyncImage(
                 model = imageRequest,
                 contentDescription = null,
@@ -91,7 +95,7 @@ fun LinkCard(
                 .fillMaxWidth()
                 .heightIn(max = 85.dp)
         ) {
-            if (!isBig) {
+            if (!isBig) { // Image is displayed as a square on the side when not landscape
                 AsyncImage(
                     model = imageRequest,
                     contentDescription = null,
