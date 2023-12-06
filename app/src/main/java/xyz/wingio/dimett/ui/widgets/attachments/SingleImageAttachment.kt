@@ -1,5 +1,6 @@
 package xyz.wingio.dimett.ui.widgets.attachments
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -23,6 +25,9 @@ import com.ondev.imageblurkt_lib.IBlurModel
 import com.ondev.imageblurkt_lib.R
 import xyz.wingio.dimett.rest.dto.post.MediaAttachment
 
+/**
+ * Displays an image (with blurhash if supported)
+ */
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun SingleImageAttachment(
@@ -33,11 +38,12 @@ fun SingleImageAttachment(
     ) {
         val height = with(LocalDensity.current) {
             ((9f / 16f) * constraints.maxWidth).toDp()
-        }
+        } // Make sure the image is always 16:9
+
         Box(
             modifier = Modifier
-                .shadow(3.dp, RoundedCornerShape(12.dp))
-                .clip(RoundedCornerShape(12.dp))
+                .shadow(elevation = 3.dp, shape = RoundedCornerShape(12.dp), clip = true)
+                .background(Color.Black)
                 .fillMaxWidth()
                 .heightIn(max = height)
         ) {

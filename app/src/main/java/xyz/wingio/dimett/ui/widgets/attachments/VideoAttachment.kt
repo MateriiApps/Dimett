@@ -37,18 +37,25 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import xyz.wingio.dimett.rest.dto.post.MediaAttachment
 
+/**
+ * Displays a basic video player
+ */
 @Composable
 @OptIn(androidx.media3.common.util.UnstableApi::class)
 fun VideoAttachment(attachment: MediaAttachment) {
     val context = LocalContext.current
+
+    // Whether or not the MediaControls component is visible
     var showControls by remember {
         mutableStateOf(false)
     }
+
+    // Whether or not the video is currently loading
     var loading by remember {
         mutableStateOf(false)
     }
 
-    val player = remember(context) {
+    val player = remember(context, attachment) {
         ExoPlayer.Builder(context).build().apply {
             val dataSourceFactory = DefaultDataSource.Factory(context)
             val source = ProgressiveMediaSource.Factory(dataSourceFactory)
