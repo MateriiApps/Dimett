@@ -8,22 +8,22 @@ import xyz.wingio.syntakts.compose.style.toSyntaktsColor
 import xyz.wingio.syntakts.style.Style
 
 const val urlRegex =
-    "https?:\\/\\/([\\w+?]+\\.[\\w+]+)([a-zA-Z0-9\\~\\!\\@\\#\\\$\\%\\^\\&\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?"
+    "https?:\\/\\/([\\w+?]+\\.[\\w+]+)([a-zA-Z0-9\\~\\!\\@\\#\\\$\\%\\^\\&\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?" // https://example.com
 
 const val hyperlinkRegex =
-    "\\[(.+?)\\]\\(($urlRegex)\\)"
+    "\\[(.+?)\\]\\(($urlRegex)\\)" // [link](https://example.com)
 
 const val clickableRegex =
-    "\\[(.+?)\\]\\{(.+?)\\}"
+    "\\[(.+?)\\]\\{(.+?)\\}" // [some text]{onSomeAction}
 
 const val emojiRegex =
-    ":(.+?):"
+    ":(.+?):" // :shortcode:
 
 const val mentionRegex =
-    "@(\\S+?)\\b(@(\\S+)\\b)?"
+    "@(\\S+?)\\b(@(\\S+)\\b)?" // @user or @user@example.social
 
 const val hashtagRegex =
-    "#(.+?)\\b"
+    "#(.+?)\\b" // #sometext
 
 fun Syntakts.Builder<DefaultRenderContext>.addUrlRule() {
     rule(urlRegex) { result, context ->

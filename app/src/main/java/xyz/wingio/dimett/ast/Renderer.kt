@@ -10,6 +10,14 @@ import xyz.wingio.syntakts.compose.rememberAsyncRendered
 import xyz.wingio.syntakts.markdown.addBasicMarkdownRules
 import xyz.wingio.syntakts.syntakts
 
+/**
+ * Renders a formatted version of [text]
+ *
+ * @param text Text to parse and format
+ * @param emojiMap Used to insert custom emoji into the text
+ * @param mentionMap All the users mentioned in the post
+ * @param actionHandler Callback that is passed the actions name
+ */
 @Composable
 fun Syntakts<DefaultRenderContext>.render(
     text: String,
@@ -21,6 +29,11 @@ fun Syntakts<DefaultRenderContext>.render(
     context = rememberRenderContext(emojiMap, mentionMap, actionHandler)
 )
 
+/**
+ * Creates a remembered version of [DefaultRenderContext]
+ *
+ * @see DefaultRenderContext
+ */
 @Composable
 fun rememberRenderContext(
     emojiMap: Map<String, String>,
@@ -35,6 +48,9 @@ fun rememberRenderContext(
     }
 }
 
+/**
+ * Contains all the rules for rendering post content
+ */
 val DefaultSyntakts = syntakts {
     addHashtagRule()
     addMentionRule()
@@ -43,6 +59,9 @@ val DefaultSyntakts = syntakts {
     addUnicodeEmojiRule()
 }
 
+/**
+ * Contains the rules for rendering styled string resources
+ */
 val StringSyntakts = syntakts {
     addUrlRule()
     addClickableRule()
@@ -50,6 +69,9 @@ val StringSyntakts = syntakts {
     addUnicodeEmojiRule()
 }
 
+/**
+ * Only contains rules necessary for emotes and Twemoji
+ */
 val EmojiSyntakts = syntakts {
     addEmojiRule()
     addUnicodeEmojiRule()
