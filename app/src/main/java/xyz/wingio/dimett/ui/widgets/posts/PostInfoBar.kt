@@ -18,6 +18,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.ui.components.Text
 
+/**
+ * Displays some additional information about a post
+ */
 @Composable
 fun PostInfoBar(
     icon: ImageVector,
@@ -29,17 +32,16 @@ fun PostInfoBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(
-            Modifier.width(10.dp)
+            Modifier.width(10.dp) // Push to the side a little bit to line the space up with the avatar in a post
         )
         Icon(
             imageVector = icon,
             contentDescription = stringResource(iconDescription),
             modifier = Modifier.size(18.dp)
         )
-        ProvideTextStyle(MaterialTheme.typography.labelSmall) {
-            Text(
-                text = text
-            )
-        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall
+        )
     }
 }

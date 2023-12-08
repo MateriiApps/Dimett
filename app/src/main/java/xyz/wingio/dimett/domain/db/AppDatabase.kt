@@ -6,6 +6,9 @@ import androidx.room.TypeConverters
 import xyz.wingio.dimett.domain.db.entities.Account
 import xyz.wingio.dimett.domain.db.entities.Instance
 
+/**
+ * Manages complex persistent data (Such as accounts and instances)
+ */
 @Database(
     entities = [Account::class, Instance::class],
     version = 1

@@ -3,6 +3,7 @@ package xyz.wingio.dimett.rest.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/Application/
 @Serializable
 data class Application(
     val name: String,

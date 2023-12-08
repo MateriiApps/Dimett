@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.cachedIn
-import androidx.paging.compose.LazyPagingItems
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import kotlinx.coroutines.launch
@@ -15,21 +14,27 @@ import xyz.wingio.dimett.rest.dto.post.Post
 import xyz.wingio.dimett.rest.utils.ApiResponse
 import xyz.wingio.dimett.rest.utils.fold
 
+/**
+ * [ViewModel][ScreenModel] used by [xyz.wingio.dimett.ui.screens.feed.FeedTab]
+ */
 class FeedViewModel(
-    private val repo: MastodonRepository
+    private val mastodonRepository: MastodonRepository
 ) : ScreenModel {
 
+    // Client side modifications (such as favorited status)
     val modifiedPosts = mutableStateMapOf<String, Post>()
 
+    // Used for request pagination (infinite scroll)
+    // TODO: Possibly extract logic so that it can be reused with other requests
     val posts = Pager(PagingConfig(pageSize = 20)) {
         object : PagingSource<String, Post>() {
             override suspend fun load(params: LoadParams<String>): LoadResult<String, Post> {
-                val next = params.key
+                val next = params.key // Should be the last post's id
 
-                return when (val response = repo.getFeed(max = next)) {
+                return when (val response = mastodonRepository.getFeed(max = next)) {
                     is ApiResponse.Success -> {
                         val nextKey = response.data.lastOrNull()?.id
-                        if (next == null) modifiedPosts.clear()
+                        if (next == null) modifiedPosts.clear() // Reset modifications when refreshing
 
                         LoadResult.Page(
                             data = response.data,
@@ -59,11 +64,14 @@ class FeedViewModel(
                     state.closestPageToPosition(it)?.prevKey
                 }
         }
-    }.flow.cachedIn(coroutineScope)
+    }.flow.cachedIn(coroutineScope) // Binds requests to the lifecycle of this ScreenModel
 
+    /**
+     * (Un)favorite a post based on whether it was previously favorited
+     */
     fun toggleFavorite(id: String, favorited: Boolean) {
         coroutineScope.launch {
-            val res = if (favorited) repo.unfavoritePost(id) else repo.favoritePost(id)
+            val res = if (favorited) mastodonRepository.unfavoritePost(id) else mastodonRepository.favoritePost(id)
             res.fold(
                 success = {
                     modifiedPosts[id] = it
@@ -72,9 +80,12 @@ class FeedViewModel(
         }
     }
 
-    fun toggleBoost(id: String, boosted: Boolean, items: LazyPagingItems<Post>) {
+    /**
+     * (Un)boost a post based on whether it was previously boosted
+     */
+    fun toggleBoost(id: String, boosted: Boolean) {
         coroutineScope.launch {
-            val res = if (boosted) repo.unboostPost(id) else repo.boostPost(id)
+            val res = if (boosted) mastodonRepository.unboostPost(id) else mastodonRepository.boostPost(id)
             res.fold(
                 success = {
                     if (boosted)

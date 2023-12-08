@@ -38,6 +38,9 @@ import androidx.media3.ui.PlayerView
 import xyz.wingio.dimett.rest.dto.post.MediaAttachment
 import xyz.wingio.dimett.ui.components.Text
 
+/**
+ * Displays a silent looping video, as GIF is kind of a bad format
+ */
 @Composable
 @OptIn(androidx.media3.common.util.UnstableApi::class)
 fun SingleGifAttachment(
@@ -48,7 +51,7 @@ fun SingleGifAttachment(
         mutableStateOf(false)
     }
 
-    val player = remember(context) {
+    val player = remember(context, attachment) {
         ExoPlayer.Builder(context).build().apply {
             val dataSourceFactory = DefaultDataSource.Factory(context)
             val source = ProgressiveMediaSource.Factory(dataSourceFactory)
@@ -66,7 +69,8 @@ fun SingleGifAttachment(
     ) {
         val height = with(LocalDensity.current) {
             ((9f / 16f) * constraints.maxWidth).toDp()
-        }
+        } // Calculates the height so that the gif is always 16:9
+
         Box(
             modifier = Modifier
                 .shadow(3.dp, RoundedCornerShape(12.dp))
@@ -76,16 +80,17 @@ fun SingleGifAttachment(
         ) {
             Box {
                 DisposableEffect(
-                    AndroidView(factory = {
-                        PlayerView(it).apply {
+                    // As far as I know there isn't an existing compose wrapper for ExoPlayer
+                    AndroidView(factory = { ctx ->
+                        PlayerView(ctx).apply {
                             hideController()
-                            useController = false
+                            useController = false // Gifs don't need :)
                             this.player = player
                             resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
 
                             layoutParams = FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.MATCH_PARENT,
-                                FrameLayout.LayoutParams.WRAP_CONTENT
+                                /* width = */ FrameLayout.LayoutParams.MATCH_PARENT,
+                                /* height = */ FrameLayout.LayoutParams.WRAP_CONTENT
                             )
                         }
                     })

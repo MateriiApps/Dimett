@@ -26,6 +26,12 @@ import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.R
 import xyz.wingio.dimett.rest.dto.meta.NodeInfo
 
+/**
+ * Displays some information about an instance
+ *
+ * @param url Used in place of the instance name if it doesn't exist
+ * @param nodeInfo Standard metadata for ActivityPub instances, this is where most of the displayed information is from
+ */
 @Composable
 fun InstancePreview(
     url: String,
@@ -43,13 +49,13 @@ fun InstancePreview(
 
     Box(
         modifier = Modifier
-            .width(350.dp)
-            .padding(bottom = iconSize / 2)
+            .width(350.dp) // Don't want this to be really wide
+            .padding(bottom = iconSize / 2) // Account for the additional space taken up by the logo
     ) {
         ElevatedCard(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = iconSize / 2)
+                .offset(y = iconSize / 2) // Centers the logo image on the top of the card
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(3.dp),

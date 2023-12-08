@@ -19,6 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
+/**
+ * Adds an overlay on videos and gifs with the videos preview image, disappears after clicking
+ *
+ * @param previewUrl Url to the video/gifs preview image
+ * @param contentDescription Content description of the video/gif
+ * @param onPlay Called when the component is clicked
+ */
 @Composable
 fun PlayButtonOverlay(
     previewUrl: String,

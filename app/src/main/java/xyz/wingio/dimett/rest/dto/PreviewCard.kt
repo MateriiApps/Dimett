@@ -3,6 +3,7 @@ package xyz.wingio.dimett.rest.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/PreviewCard/
 @Serializable
 data class PreviewCard(
     val url: String,

@@ -15,13 +15,17 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import xyz.wingio.dimett.rest.dto.post.MediaAttachment
 
+/**
+ * For audio attachments we just use the [MediaControls]
+ */
+// TODO: Make more distinct player for audio
 @Composable
 @OptIn(UnstableApi::class)
 fun AudioAttachment(
     attachment: MediaAttachment
 ) {
     val context = LocalContext.current
-    val player = remember(context) {
+    val player = remember(context, attachment) {
         val tSelector = DefaultTrackSelector(context)
         ExoPlayer.Builder(context)
             .setTrackSelector(tSelector)

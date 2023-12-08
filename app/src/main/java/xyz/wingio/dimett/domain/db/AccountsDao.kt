@@ -8,6 +8,9 @@ import androidx.room.Query
 import androidx.room.Update
 import xyz.wingio.dimett.domain.db.entities.Account
 
+/**
+ * Used to manage saved [Account]s
+ */
 @Dao
 interface AccountsDao {
 

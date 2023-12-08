@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/Poll/
 @Serializable
 data class Poll(
     val id: String,
@@ -18,6 +19,7 @@ data class Poll(
     @SerialName("own_votes") val ownVotes: List<Int> = emptyList()
 ) {
 
+    // https://docs.joinmastodon.org/entities/Poll/#Option
     @Serializable
     data class Option(
         val title: String,

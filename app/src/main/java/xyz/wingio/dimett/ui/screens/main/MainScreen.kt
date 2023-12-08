@@ -32,14 +32,14 @@ import xyz.wingio.dimett.ui.viewmodels.main.MainViewModel
 import xyz.wingio.dimett.utils.LocalPagerState
 import xyz.wingio.dimett.utils.RootTab
 
+/**
+ * Hosts the Home, Explore, Inbox (Notifications), and Profile tabs
+ */
 class MainScreen : Screen {
 
     @Composable
-    override fun Content() = Screen()
-
-    @Composable
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-    private fun Screen() {
+    override fun Content() {
         val viewModel: MainViewModel = getScreenModel()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         val coroutineScope = rememberCoroutineScope()
@@ -47,8 +47,9 @@ class MainScreen : Screen {
             RootTab.entries.size
         }
 
+        // Navigate to the home tab when the back button is pressed
         BackHandler(
-            enabled = pagerState.currentPage != 0
+            enabled = pagerState.currentPage != 0 // We don't want to do this on the home tab
         ) {
             coroutineScope.launch {
                 pagerState.animateScrollToPage(0)
@@ -56,10 +57,10 @@ class MainScreen : Screen {
         }
 
         CompositionLocalProvider(
-            LocalPagerState provides pagerState
+            LocalPagerState provides pagerState // Lets all children access the state used by the HorizontalPager
         ) {
             Scaffold(
-                bottomBar = { TabBar(pagerState, viewModel) },
+                bottomBar = { TabBar(viewModel) },
                 topBar = { TopBar(RootTab.entries[pagerState.currentPage].tab, scrollBehavior) }
             ) { pv ->
                 HorizontalPager(
@@ -106,11 +107,11 @@ class MainScreen : Screen {
     @Composable
     @OptIn(ExperimentalFoundationApi::class)
     private fun TabBar(
-        pagerState: PagerState,
         viewModel: MainViewModel
     ) {
-        val tab = RootTab.entries[pagerState.currentPage].tab
-        val coroutineScope = rememberCoroutineScope()
+        val pagerState = LocalPagerState.current // This PagerState should be the one used for tabs
+        val tab = RootTab.entries[pagerState.currentPage].tab // Gets the currently selected/visible tab
+        val coroutineScope = rememberCoroutineScope() // Just required for certain animations
 
         NavigationBar {
             RootTab.entries.forEach {
@@ -124,6 +125,7 @@ class MainScreen : Screen {
                     },
                     icon = {
                         if(it == RootTab.PROFILE && viewModel.account != null) {
+                            // For the profile tab we want to display the current users avatar
                             AsyncImage(
                                 model = viewModel.account!!.avatar,
                                 contentDescription = stringResource(
@@ -131,10 +133,11 @@ class MainScreen : Screen {
                                     viewModel.account!!.username
                                 ),
                                 modifier = Modifier
-                                    .size(24.dp)
+                                    .size(24.dp) // About the same size that the other icons use
                                     .clip(CircleShape)
                             )
                         } else {
+                            // All others use an icon that changes depending on whether or not the tab is selected
                             Icon(
                                 painter = it.tab.options.icon!!,
                                 contentDescription = it.tab.options.title

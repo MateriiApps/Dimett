@@ -26,11 +26,16 @@ import xyz.wingio.dimett.ast.rendercontext.DefaultRenderContext
 import xyz.wingio.syntakts.Syntakts
 import xyz.wingio.syntakts.compose.rememberRendered
 
+/**
+ * Required in order to support custom emotes and Twemoji
+ *
+ * @param textStyle Used for calculating the size of the emoji
+ */
 @Composable
 fun inlineContent(
     textStyle: TextStyle = LocalTextStyle.current
 ): Map<String, InlineTextContent> {
-    val emoteSize = remember(textStyle) { (textStyle.fontSize.value + 2f).sp }
+    val emoteSize = remember(textStyle) { (textStyle.fontSize.value + 2f).sp } // Make emojis a little bigger than the surrounding text
     val ctx = LocalContext.current
 
     return remember(emoteSize, ctx) {
@@ -56,9 +61,16 @@ fun inlineContent(
                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
                 ),
             ) { emoji ->
-                val emojiImage = BitmapDrawable(EmojiUtils.emojis[emoji]?.let {
-                    ctx.getResId(it)
-                }?.let { ctx.resources.openRawResource(it) }).bitmap.asImageBitmap()
+                val emojiImage = BitmapDrawable(
+                    /* res = */ ctx.resources,
+                    /* is = */ EmojiUtils.emojis[emoji]
+                        ?.let { rawResourceName ->
+                            ctx.getResId(rawResourceName)
+                        }
+                        ?.let { rawResId ->
+                            ctx.resources.openRawResource(rawResId)
+                        }
+                ).bitmap.asImageBitmap()
 
                 Image(
                     bitmap = emojiImage,
@@ -70,15 +82,25 @@ fun inlineContent(
     }
 }
 
-
+/**
+ * Retrieves a string resource and formats it
+ *
+ * @param string Resource id for the desired string
+ * @param args Formatting arguments
+ * ---
+ * Ex: "%1$s has favorited your post" with user.username
+ * @param syntakts The [Syntakts] instance used to render the text
+ * @param actionHandler Ran whenever any text is clicked
+ */
 @Composable
 fun getString(
     @StringRes string: Int,
     vararg args: Any,
     syntakts: Syntakts<DefaultRenderContext> = StringSyntakts,
-    actionHandler: (String) -> Unit = {}
+    actionHandler: (actionName: String) -> Unit = {}
 ): AnnotatedString {
     val _string = stringResource(string, *args)
+
     return syntakts.rememberRendered(
         text = _string,
         context = DefaultRenderContext(

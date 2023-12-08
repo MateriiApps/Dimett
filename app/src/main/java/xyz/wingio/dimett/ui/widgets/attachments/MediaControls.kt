@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,25 +32,38 @@ import kotlinx.coroutines.delay
 import xyz.wingio.dimett.R
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * Displays controls such as a play/pause button and a seekbar
+ *
+ * @param player [ExoPlayer] instance getting controlled
+ */
 @Composable
 fun MediaControls(
     player: ExoPlayer
 ) {
+    // Whether or not the user is actively using the seekbar
     var seeking by remember(player) {
         mutableStateOf(false)
     }
+
+    // Whether or not the video/audio is playing
     var playing by remember(player) {
         mutableStateOf(player.isPlaying)
     }
+
+    // The length of the video/audio
     var duration by remember(player) {
-        mutableStateOf(player.duration)
+        mutableLongStateOf(player.duration)
     }
+
+    // Current position in the video/audio
     var position by remember(player) {
-        mutableStateOf(player.currentPosition)
+        mutableLongStateOf(player.currentPosition)
     }
 
     DisposableEffect(player) {
         val listener = object : Player.Listener {
+            // Updates all our state variables
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 playing = isPlaying
                 duration = player.duration
@@ -58,10 +72,12 @@ fun MediaControls(
         }
         player.addListener(listener)
 
-        onDispose { player.removeListener(listener) }
+        onDispose { player.removeListener(listener) } // Remove the listener when the component leaves the scope
     }
+
     if (playing) {
         LaunchedEffect(Unit) {
+            // We kinda have to do this bc ExoPlayer doesn't provide a listener for player position
             while (!seeking) {
                 position = player.currentPosition
                 delay(1.seconds)
@@ -82,7 +98,7 @@ fun MediaControls(
                     player.pause()
                 else {
                     if (player.currentPosition >= player.duration)
-                        player.seekTo(0)
+                        player.seekTo(0) // Replay the media if its finished playing
                     player.play()
                 }
             }

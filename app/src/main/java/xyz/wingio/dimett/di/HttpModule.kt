@@ -27,7 +27,7 @@ val httpModule = module {
         defaultRequest {
             header(
                 HttpHeaders.UserAgent,
-                "Dimett/${BuildConfig.APPLICATION_ID} v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})${if (BuildConfig.DEBUG) " - Debug" else ""}"
+                "Dimett/${BuildConfig.APPLICATION_ID} v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})" // Dimett/xyz.wingio.dimett v1.0.0 (1)
             )
         }
         install(Logging) {

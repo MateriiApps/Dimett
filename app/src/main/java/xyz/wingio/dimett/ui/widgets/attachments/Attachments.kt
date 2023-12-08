@@ -16,8 +16,11 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import xyz.wingio.dimett.rest.dto.post.MediaAttachment
 
-@OptIn(ExperimentalFoundationApi::class)
+/**
+ * Just shows [SingleAttachment] if [attachments] only contains one item, otherwise uses a [HorizontalPager]
+ */
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun Attachments(
     attachments: List<MediaAttachment>
 ) {

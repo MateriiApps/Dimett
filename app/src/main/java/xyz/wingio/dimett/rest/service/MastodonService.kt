@@ -16,25 +16,54 @@ import xyz.wingio.dimett.rest.dto.user.CredentialUser
 import xyz.wingio.dimett.rest.utils.Routes
 import xyz.wingio.dimett.rest.utils.setForm
 
+/**
+ * Service for interacting with the [Mastodon API](https://docs.joinmastodon.org/methods)
+ *
+ * @param http Instance of [HttpService] used to make requests
+ * @param accounts Used to obtain the correct credentials
+ */
 class MastodonService(
     private val http: HttpService,
     private val accounts: AccountManager
 ) {
 
+    /**
+     * Applies the instances base url to the desired [route]
+     */
     private fun HttpRequestBuilder.route(route: String) =
         url("https://${accounts.current?.instance}$route")
 
+    /**
+     * Adds the correct authorization header to the request
+     */
     private fun HttpRequestBuilder.authorize() =
         header(HttpHeaders.Authorization, "Bearer ${accounts.current?.token}")
 
+    /**
+     * Fetches the location of the instances Nodeinfo
+     *
+     * @see Routes.WELL_KNOWN.NODEINFO
+     */
     suspend fun getNodeInfoLocation(instanceUrl: String) = http.request<NodeInfoLocation> {
         url("https://$instanceUrl${Routes.WELL_KNOWN.NODEINFO}")
     }
 
+    /**
+     * Fetches the Nodeinfo object from the route obtained from [getNodeInfoLocation]
+     *
+     * @see NodeInfo
+     */
     suspend fun getNodeInfo(url: String) = http.request<NodeInfo> {
         url(url)
     }
 
+    /**
+     * Creates an [Application] used to authenticate on behalf of the user
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/apps/)
+     *
+     * @see Application
+     */
     suspend fun createApp(instanceUrl: String) = http.request<Application> {
         url("https://$instanceUrl${Routes.V1.APPS}")
 
@@ -50,6 +79,13 @@ class MastodonService(
         method = HttpMethod.Post
     }
 
+    /**
+     * Obtains an api token to be used for future api calls, part of the OAuth flow
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/oauth/#token)
+     *
+     * @see Token
+     */
     suspend fun getToken(
         instanceUrl: String,
         code: String,
@@ -68,6 +104,13 @@ class MastodonService(
         }
     }
 
+    /**
+     * Obtains the user associated with the [token]
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/accounts/#verify_credentials)
+     *
+     * @see CredentialUser
+     */
     suspend fun verifyCredentials(
         instanceUrl: String = accounts.current?.instance ?: "",
         token: String? = accounts.current?.token
@@ -77,6 +120,13 @@ class MastodonService(
             header("authorization", "Bearer $token")
         }
 
+    /**
+     * Gets the home feed for the logged in user
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/timelines/#home)
+     *
+     * @see Post
+     */
     suspend fun getFeed(
         max: String? = null,
         since: String? = null,
@@ -92,24 +142,52 @@ class MastodonService(
         parameter("limit", limit)
     }
 
+    /**
+     * Favorites (likes) a post with the given [id]
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/statuses/#favourite)
+     *
+     * @see Post
+     */
     suspend fun favoritePost(id: String) = http.request<Post> {
         route(Routes.V1.Posts.FAVORITE(id))
         authorize()
         method = HttpMethod.Post
     }
 
+    /**
+     * Unfavorites (unlikes) a post with the given [id]
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/statuses/#unfavourite)
+     *
+     * @see Post
+     */
     suspend fun unfavoritePost(id: String) = http.request<Post> {
         route(Routes.V1.Posts.UNFAVORITE(id))
         authorize()
         method = HttpMethod.Post
     }
 
+    /**
+     * Boosts (reposts/retweets) a post with the given [id]
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/statuses/#boost)
+     *
+     * @see Post
+     */
     suspend fun boostPost(id: String) = http.request<Post> {
         route(Routes.V1.Posts.BOOST(id))
         authorize()
         method = HttpMethod.Post
     }
 
+    /**
+     * Unboosts (unreposts/unretweets) a post with the given [id]
+     *
+     * [Ref](https://docs.joinmastodon.org/methods/statuses/#boost)
+     *
+     * @see Post
+     */
     suspend fun unboostPost(id: String) = http.request<Post> {
         route(Routes.V1.Posts.UNBOOST(id))
         authorize()

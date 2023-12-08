@@ -3,6 +3,7 @@ package xyz.wingio.dimett.rest.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/Token/
 @Serializable
 data class Token(
     @SerialName("access_token") val accessToken: String,

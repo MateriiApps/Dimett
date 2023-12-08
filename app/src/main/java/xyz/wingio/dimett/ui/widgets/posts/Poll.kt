@@ -32,17 +32,36 @@ import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.utils.getString
 import xyz.wingio.dimett.utils.toEmojiMap
 
+/**
+ * Allows users to vote for one or more options
+ */
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun Poll(
     poll: Poll,
     onVote: (String, List<Int>) -> Unit = { _, _ -> }
 ) {
-    val emojiMap = poll.emojis.toEmojiMap()
-    val selected = remember {
-        val l = mutableStateListOf<Int>()
-        l.addAll(poll.ownVotes)
-        l
+    val emojiMap = remember(poll) { poll.emojis.toEmojiMap() }
+    val selected = remember(poll) {
+        mutableStateListOf<Int>().apply {
+            addAll(poll.ownVotes)
+        }
+    }
+
+    /**
+     * Updates the currently selected options
+     */
+    fun select(optionIndex: Int, voted: Boolean) {
+        if (!poll.multiple) { // Only select one item at a time
+            selected.clear()
+            selected.add(optionIndex)
+        }
+
+        if (voted && poll.multiple) {
+            selected.remove(optionIndex) // Unselect when selected
+        } else {
+            selected.add(optionIndex)
+        }
     }
 
     Column(
@@ -51,18 +70,6 @@ fun Poll(
         for (i in poll.options.indices) {
             val option = poll.options[i]
             val voted = selected.contains(i)
-            val vote = {
-                if (!poll.multiple) {
-                    selected.clear()
-                    selected.add(i)
-                }
-
-                if (voted && poll.multiple) {
-                    selected.remove(i)
-                } else {
-                    selected.add(i)
-                }
-            }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -70,7 +77,7 @@ fun Poll(
                     .shadow(3.dp, RoundedCornerShape(10.dp))
                     .clip(RoundedCornerShape(10.dp))
                     .clickable {
-                        vote()
+                        select(i, voted)
                     }
                     .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
                     .padding(12.dp)
@@ -90,7 +97,7 @@ fun Poll(
                 RadioButton(
                     selected = voted,
                     onClick = {
-                        vote()
+                        select(i, voted)
                     },
                     modifier = Modifier
                         .weight(0.25f)

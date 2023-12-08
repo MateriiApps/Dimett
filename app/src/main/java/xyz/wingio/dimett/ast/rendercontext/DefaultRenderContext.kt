@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.UriHandler
 
 data class DefaultRenderContext(
-    val emojiMap: Map<String, String>,
-    val mentionMap: Map<String, String>,
+    val emojiMap: Map<String, String>, // shortcode: url
+    val mentionMap: Map<String, String>, // username to id
     val linkColor: Color,
     val uriHandler: UriHandler,
-    val clickActionHandler: (String) -> Unit
+    val clickActionHandler: (String) -> Unit // Is passed the action name (Ex. onUserClick)
 )

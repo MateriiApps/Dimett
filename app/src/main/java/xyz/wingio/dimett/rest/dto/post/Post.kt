@@ -9,6 +9,7 @@ import xyz.wingio.dimett.rest.dto.Poll
 import xyz.wingio.dimett.rest.dto.PreviewCard
 import xyz.wingio.dimett.rest.dto.user.User
 
+// https://docs.joinmastodon.org/entities/Status
 @Serializable
 data class Post(
     val id: String,
@@ -64,6 +65,7 @@ data class Post(
 
 }
 
+// https://docs.joinmastodon.org/entities/Status/#application
 @Serializable
 data class Application(
     val name: String,

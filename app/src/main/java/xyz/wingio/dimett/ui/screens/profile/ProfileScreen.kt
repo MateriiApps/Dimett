@@ -25,6 +25,7 @@ import xyz.wingio.dimett.ui.components.Text
 import xyz.wingio.dimett.utils.TabOptions
 import xyz.wingio.dimett.utils.getString
 
+// TODO: Implement
 open class ProfileScreen: Screen {
 
     @Composable
@@ -51,6 +52,9 @@ open class ProfileScreen: Screen {
 
 }
 
+/**
+ * Lets us use [ProfileScreen] as a tab
+ */
 class ProfileTab : ProfileScreen(), Tab {
 
     override val options: TabOptions

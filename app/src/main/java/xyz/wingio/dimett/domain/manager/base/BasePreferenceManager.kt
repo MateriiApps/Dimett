@@ -8,6 +8,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.content.edit
 import kotlin.reflect.KProperty
 
+/**
+ * Utility for managing [SharedPreferences] with Compose state
+ *
+ * @param prefs [SharedPreferences] instance to be managed
+ */
 abstract class BasePreferenceManager(
     private val prefs: SharedPreferences
 ) {
@@ -35,6 +40,9 @@ abstract class BasePreferenceManager(
     protected inline fun <reified E : Enum<E>> putEnum(key: String, value: E) =
         putString(key, value.name)
 
+    /**
+     * Delegate that wraps around a preference to give it state
+     */
     protected class Preference<T>(
         private val key: String,
         defaultValue: T,
@@ -52,6 +60,12 @@ abstract class BasePreferenceManager(
         }
     }
 
+    /**
+     * Delegate for a [String] based preference
+     *
+     * @param key The preferences name
+     * @param defaultValue Starting value for this preference
+     */
     protected fun stringPreference(
         key: String,
         defaultValue: String = ""
@@ -62,6 +76,12 @@ abstract class BasePreferenceManager(
         setter = ::putString
     )
 
+    /**
+     * Delegate for a [Boolean] based preference
+     *
+     * @param key The preferences name
+     * @param defaultValue Starting value for this preference
+     */
     protected fun booleanPreference(
         key: String,
         defaultValue: Boolean
@@ -72,6 +92,12 @@ abstract class BasePreferenceManager(
         setter = ::putBoolean
     )
 
+    /**
+     * Delegate for an [Int] based preference
+     *
+     * @param key The preferences name
+     * @param defaultValue Starting value for this preference
+     */
     protected fun intPreference(
         key: String,
         defaultValue: Int
@@ -82,6 +108,12 @@ abstract class BasePreferenceManager(
         setter = ::putInt
     )
 
+    /**
+     * Delegate for a [Float] based preference
+     *
+     * @param key The preferences name
+     * @param defaultValue Starting value for this preference
+     */
     protected fun floatPreference(
         key: String,
         defaultValue: Float
@@ -92,6 +124,12 @@ abstract class BasePreferenceManager(
         setter = ::putFloat
     )
 
+    /**
+     * Delegate for a [Color] based preference
+     *
+     * @param key The preferences name
+     * @param defaultValue Starting value for this preference
+     */
     protected fun colorPreference(
         key: String,
         defaultValue: Color
@@ -102,7 +140,12 @@ abstract class BasePreferenceManager(
         setter = ::putColor
     )
 
-
+    /**
+     * Delegate for an [Enum] based preference
+     *
+     * @param key The preferences name
+     * @param defaultValue Starting value for this preference
+     */
     protected inline fun <reified E : Enum<E>> enumPreference(
         key: String,
         defaultValue: E
