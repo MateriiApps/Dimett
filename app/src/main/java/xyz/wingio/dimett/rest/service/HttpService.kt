@@ -14,11 +14,23 @@ import xyz.wingio.dimett.rest.utils.ApiError
 import xyz.wingio.dimett.rest.utils.ApiFailure
 import xyz.wingio.dimett.rest.utils.ApiResponse
 
+/**
+ * Handles sending requests and getting responses in a safe manner
+ *
+ * @param json Used to deserialize response bodies
+ * @param http Ktor client used to build and send the requests
+ */
 class HttpService(
     val json: Json,
     val http: HttpClient
 ) {
 
+    /**
+     * Makes a request and safely wraps responses for better error handling
+     *
+     * @param builder Used to build the request
+     * @return Wrapped response body
+     */
     suspend inline fun <reified T> request(crossinline builder: HttpRequestBuilder.() -> Unit = {}): ApiResponse<T> =
         withContext(Dispatchers.IO) {
             var body: String? = null
