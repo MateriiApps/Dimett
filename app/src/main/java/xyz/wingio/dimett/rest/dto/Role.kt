@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/Role/
 @Serializable
 data class Role(
     val id: String,

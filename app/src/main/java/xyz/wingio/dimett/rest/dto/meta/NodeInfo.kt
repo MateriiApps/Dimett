@@ -2,6 +2,7 @@ package xyz.wingio.dimett.rest.dto.meta
 
 import kotlinx.serialization.Serializable
 
+// http://nodeinfo.diaspora.software/schema.html
 @Serializable
 data class NodeInfo(
     val metadata: MetaData? = null,
@@ -43,6 +44,7 @@ data class NodeInfo(
 
 }
 
+// Response from /.well-known/nodeinfo
 @Serializable
 data class NodeInfoLocation(
     val links: List<Link>

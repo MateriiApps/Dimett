@@ -3,6 +3,7 @@ package xyz.wingio.dimett.rest.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/CustomEmoji/
 @Serializable
 data class CustomEmoji(
     val shortcode: String,

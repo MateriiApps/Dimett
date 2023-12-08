@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.wingio.dimett.rest.dto.CustomEmoji
 
+// https://docs.joinmastodon.org/entities/Account
 @Serializable
 data class User(
     val id: String,

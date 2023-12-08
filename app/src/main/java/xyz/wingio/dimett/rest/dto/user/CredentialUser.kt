@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import xyz.wingio.dimett.rest.dto.CustomEmoji
 import xyz.wingio.dimett.rest.dto.Role
 
+// https://docs.joinmastodon.org/entities/Account/#CredentialAccount
 @Serializable
 data class CredentialUser(
     val id: String,
@@ -38,6 +39,7 @@ data class CredentialUser(
     val role: Role? = null
 )
 
+// https://docs.joinmastodon.org/entities/Account/#source
 @Serializable
 data class Source(
     @SerialName("note") val bio: String? = null,

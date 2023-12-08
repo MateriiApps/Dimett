@@ -3,6 +3,7 @@ package xyz.wingio.dimett.rest.dto.post
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://docs.joinmastodon.org/entities/MediaAttachment/
 @Serializable
 data class MediaAttachment(
     val id: String,
@@ -33,6 +34,7 @@ data class MediaAttachment(
         AUDIO
     }
 
+    // This isn't really standardized so I had to find this via checking response json
     @Serializable
     data class Meta(
         val original: MetaData? = null,
