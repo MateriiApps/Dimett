@@ -8,6 +8,9 @@ import kotlinx.serialization.json.Json
 import xyz.wingio.dimett.rest.dto.CustomEmoji
 import xyz.wingio.dimett.rest.dto.user.Field
 
+/**
+ * Contains methods to convert any non-primitive data types
+ */
 @ProvidedTypeConverter
 class Converters(
     private val json: Json

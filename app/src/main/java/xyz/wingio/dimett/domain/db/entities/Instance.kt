@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Represents a Mastodon compatible instance with an existing OAuth application
+ */
 @Entity
 data class Instance(
     @PrimaryKey val url: String,

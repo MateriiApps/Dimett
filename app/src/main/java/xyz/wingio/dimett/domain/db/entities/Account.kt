@@ -6,6 +6,11 @@ import androidx.room.PrimaryKey
 import xyz.wingio.dimett.rest.dto.CustomEmoji
 import xyz.wingio.dimett.rest.dto.user.Field
 
+/**
+ * Represents an account that can be logged into
+ *
+ * @see xyz.wingio.dimett.rest.dto.user.CredentialUser
+ */
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Instance::class,

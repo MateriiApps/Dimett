@@ -5,8 +5,12 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import xyz.wingio.dimett.domain.db.entities.Account
 import xyz.wingio.dimett.domain.db.entities.Instance
 
+/**
+ * Used to manage saved [Instance]s
+ */
 @Dao
 interface InstancesDao {
 
