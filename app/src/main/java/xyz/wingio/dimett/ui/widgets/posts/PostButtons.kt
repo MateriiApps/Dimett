@@ -2,6 +2,7 @@ package xyz.wingio.dimett.ui.widgets.posts
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -12,25 +13,30 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RepeatOn
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Repeat
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.R
 import xyz.wingio.dimett.ui.components.Text
+import xyz.wingio.dimett.ui.theme.additionalColors
 import xyz.wingio.dimett.utils.formatNumber
 
 /**
@@ -64,62 +70,93 @@ fun PostButtons(
         verticalArrangement = Arrangement.aligned(Alignment.CenterVertically)
     ) {
         PostButton(
-            icon = Icons.Outlined.ChatBubbleOutline,
-            contentDescription = R.string.cd_reply,
             text = { Text(formatNumber(replies)) },
-            onClick = onReplyClick
+            inactiveIcon = Icons.Outlined.ChatBubbleOutline,
+            contentDescription = R.string.cd_reply,
+            onClick = onReplyClick,
         )
+
         PostButton(
-            icon = if (boosted) Icons.Filled.RepeatOn else Icons.Outlined.Repeat,
-            contentDescription = R.string.cd_boost,
+            active = boosted,
             text = { Text(formatNumber(boosts)) },
+            inactiveIcon = Icons.Outlined.Repeat,
+            contentDescription = R.string.cd_boost,
+            activeColor = MaterialTheme.additionalColors.boost,
             onClick = onBoostClick
         )
+
         PostButton(
-            icon = if (favorited) Icons.Filled.Star else Icons.Outlined.StarBorder,
-            contentDescription = R.string.cd_favorite,
+            active = favorited,
             text = { Text(formatNumber(favorites)) },
+            activeIcon = Icons.Filled.Favorite,
+            inactiveIcon = Icons.Outlined.FavoriteBorder,
+            contentDescription = R.string.cd_favorite,
+            activeColor = MaterialTheme.additionalColors.favorite,
             onClick = onFavoriteClick
         )
+
         Spacer(Modifier.weight(1f))
+
         PostButton(
-            icon = Icons.Outlined.Share,
-            contentDescription = R.string.action_share,
             text = { Text(stringResource(R.string.action_share)) },
+            inactiveIcon = Icons.Filled.Share,
+            contentDescription = R.string.action_share,
             onClick = onShareClick
         )
     }
 }
 
 /**
- * Version of [TextButton][androidx.compose.material3.TextButton] with an icon
+ * Version of [TextButton][androidx.compose.material3.TextButton] with an icon and an active state, used for social actions such as sharing or favoriting
  *
- * @param icon Icon displayed next to the label
- * @param contentDescription Describes the button for screen readers
- * @param text Label to be displayed in the button
  * @param onClick Called when the button is clicked
+ * @param text Label to be displayed in the button
+ * @param active Whether or not this button is in the active state (Ex. Post already favorited)
+ * @param inactiveIcon The icon to use when this button is in the default inactive state ([active] is `false`)
+ * @param activeIcon Icon displayed next to the label when [active] is `true`
+ * @param contentDescription Describes the button for screen readers
+ * @param inactiveColor Content color used when [active] is `false`
+ * @param activeColor Content color used when [active] is `true`
  */
 @Composable
 fun PostButton(
-    icon: ImageVector,
-    @StringRes contentDescription: Int,
+    onClick: () -> Unit,
     text: @Composable () -> Unit,
-    onClick: () -> Unit
+    active: Boolean = false,
+    inactiveIcon: ImageVector,
+    activeIcon: ImageVector = inactiveIcon,
+    @StringRes contentDescription: Int,
+    inactiveColor: Color = LocalContentColor.current.copy(alpha = 0.6f),
+    activeColor: Color = inactiveColor,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(CircleShape)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = activeColor),
+                onClick = onClick
+            )
             .padding(vertical = 6.dp, horizontal = 10.dp)
     ) {
         Icon(
-            imageVector = icon,
+            imageVector = if (active) activeIcon else inactiveIcon,
             contentDescription = stringResource(contentDescription),
-            modifier = Modifier.size(18.dp)
+            tint = if (active) activeColor else inactiveColor,
+            modifier = Modifier.size(16.dp)
         )
-        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-        ProvideTextStyle(MaterialTheme.typography.labelLarge) {
+
+        Spacer(
+            modifier = Modifier.width(ButtonDefaults.IconSpacing)
+        )
+
+        ProvideTextStyle(
+            MaterialTheme.typography.labelLarge.copy(
+                color = if (active) activeColor else inactiveColor,
+                fontWeight = if(active) FontWeight.Bold else FontWeight.Medium
+            )
+        ) {
             text()
         }
     }
