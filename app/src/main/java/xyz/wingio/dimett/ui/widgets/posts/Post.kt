@@ -23,6 +23,7 @@ import xyz.wingio.dimett.ast.EmojiSyntakts
 import xyz.wingio.dimett.ast.render
 import xyz.wingio.dimett.rest.dto.post.Post
 import xyz.wingio.dimett.ui.components.Text
+import xyz.wingio.dimett.ui.theme.additionalColors
 import xyz.wingio.dimett.ui.widgets.attachments.Attachments
 import xyz.wingio.dimett.utils.getString
 import xyz.wingio.dimett.utils.processPostContent
@@ -88,9 +89,10 @@ fun Post(
             if (post.boosted != null) {
                 val str = stringResource(R.string.post_user_boosted, post.author.displayName)
 
-                PostInfoBar(
+                SocialContext(
                     icon = Icons.Outlined.Repeat,
                     iconDescription = R.string.cd_boosted,
+                    iconColor = MaterialTheme.additionalColors.boost,
                     text = EmojiSyntakts.render(str, post.author.emojis.toEmojiMap(), emptyMap())
                 )
             }
