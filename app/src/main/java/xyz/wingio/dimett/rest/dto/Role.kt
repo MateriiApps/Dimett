@@ -1,10 +1,12 @@
 package xyz.wingio.dimett.rest.dto
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // https://docs.joinmastodon.org/entities/Role/
+@Stable
 @Serializable
 data class Role(
     val id: String,

@@ -1,5 +1,6 @@
 package xyz.wingio.dimett.rest.dto.post
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,6 +11,7 @@ import xyz.wingio.dimett.rest.dto.PreviewCard
 import xyz.wingio.dimett.rest.dto.user.User
 
 // https://docs.joinmastodon.org/entities/Status
+@Stable
 @Serializable
 data class Post(
     val id: String,
@@ -66,6 +68,7 @@ data class Post(
 }
 
 // https://docs.joinmastodon.org/entities/Status/#application
+@Stable
 @Serializable
 data class Application(
     val name: String,

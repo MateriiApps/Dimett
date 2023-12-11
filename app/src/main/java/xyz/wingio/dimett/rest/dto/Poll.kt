@@ -1,10 +1,12 @@
 package xyz.wingio.dimett.rest.dto
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // https://docs.joinmastodon.org/entities/Poll/
+@Stable
 @Serializable
 data class Poll(
     val id: String,

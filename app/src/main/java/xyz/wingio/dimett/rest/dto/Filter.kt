@@ -1,10 +1,12 @@
 package xyz.wingio.dimett.rest.dto
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // https://docs.joinmastodon.org/entities/Filter/
+@Stable
 @Serializable
 data class Filter(
     val id: String,

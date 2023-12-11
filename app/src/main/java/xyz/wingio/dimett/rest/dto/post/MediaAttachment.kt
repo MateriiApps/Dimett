@@ -1,9 +1,11 @@
 package xyz.wingio.dimett.rest.dto.post
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // https://docs.joinmastodon.org/entities/MediaAttachment/
+@Stable
 @Serializable
 data class MediaAttachment(
     val id: String,
@@ -16,6 +18,7 @@ data class MediaAttachment(
     val blurhash: String? = null
 ) {
 
+    @Stable
     @Serializable
     enum class Type {
         @SerialName("unknown")
@@ -35,6 +38,7 @@ data class MediaAttachment(
     }
 
     // This isn't really standardized so I had to find this via checking response json
+    @Stable
     @Serializable
     data class Meta(
         val original: MetaData? = null,
@@ -43,6 +47,7 @@ data class MediaAttachment(
         val small: MetaData? = null
     ) {
 
+        @Stable
         @Serializable
         data class MetaData(
             val width: Int? = null,

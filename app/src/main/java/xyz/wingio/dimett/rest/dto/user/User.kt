@@ -1,11 +1,13 @@
 package xyz.wingio.dimett.rest.dto.user
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.wingio.dimett.rest.dto.CustomEmoji
 
 // https://docs.joinmastodon.org/entities/Account
+@Stable
 @Serializable
 data class User(
     val id: String,

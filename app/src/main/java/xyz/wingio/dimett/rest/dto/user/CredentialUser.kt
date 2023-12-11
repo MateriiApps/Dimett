@@ -1,5 +1,6 @@
 package xyz.wingio.dimett.rest.dto.user
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,6 +8,7 @@ import xyz.wingio.dimett.rest.dto.CustomEmoji
 import xyz.wingio.dimett.rest.dto.Role
 
 // https://docs.joinmastodon.org/entities/Account/#CredentialAccount
+@Stable
 @Serializable
 data class CredentialUser(
     val id: String,
@@ -40,6 +42,7 @@ data class CredentialUser(
 )
 
 // https://docs.joinmastodon.org/entities/Account/#source
+@Stable
 @Serializable
 data class Source(
     @SerialName("note") val bio: String? = null,
