@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import xyz.wingio.dimett.R
@@ -41,11 +42,13 @@ fun PostAuthor(
     acct: String,
     emojis: Map<String, String>,
     bot: Boolean,
+    modifier: Modifier = Modifier,
     onAvatarClick: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = modifier
     ) {
         BadgedItem(badge = {
             if (bot) {
@@ -68,13 +71,17 @@ fun PostAuthor(
 
         Column {
             Text(
-                text = EmojiSyntakts.render(displayName, emojis, emptyMap()),
-                style = MaterialTheme.typography.labelLarge
+                text = EmojiSyntakts.render(displayName, emojis),
+                style = MaterialTheme.typography.labelLarge,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Text(
                 text = "@$acct",
                 style = MaterialTheme.typography.labelMedium,
-                color = LocalContentColor.current.copy(alpha = 0.5f)
+                color = LocalContentColor.current.copy(alpha = 0.5f),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         }
     }

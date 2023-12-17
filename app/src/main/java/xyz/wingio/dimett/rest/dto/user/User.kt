@@ -5,6 +5,21 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.wingio.dimett.rest.dto.CustomEmoji
+import xyz.wingio.dimett.utils.plain
+
+/**
+ * Regex to match the typical pronoun format (he/him, she/her, they/them, etc.)
+ */
+private val pronounsRegex = (
+        "(?:" +
+            "[\\w:]+" + // Word characters and `:` for emotes
+            "(?:" +
+                "\\/[\\w:]+" + // Word characters and `:` for emotes with a preceding `/`
+            ")+" + // Allow for more than 2
+            "|" +
+            "any(?: pronouns)?" + // Special use case for people without a preference
+        ")"
+).toRegex(RegexOption.IGNORE_CASE)
 
 // https://docs.joinmastodon.org/entities/Account
 @Stable
@@ -36,4 +51,20 @@ data class User(
     @SerialName("followers_count") val followers: Int,
     @SerialName("following_count") val following: Int,
     @SerialName("mute_expires_at") val muteExpiration: Instant? = null
-)
+) {
+
+    /**
+     * Finds a pronouns field that matches [pronounsRegex]
+     *
+     * NOT FROM THE API
+     */
+    val pronouns = fields
+        .firstOrNull {
+            it.name.lowercase() == "pronouns"
+        }
+        ?.let {
+            pronounsRegex.find(it.value.plain)
+        }
+        ?.value?.lowercase()
+
+}

@@ -27,6 +27,12 @@
     <string name="cd_play">Play</string>
     <string name="cd_pause">Pause</string>
     <string name="cd_thinking_emoji">Thinking Emoji</string>
+    <string name="cd_pronouns">Pronouns</string>
+
+    <string name="cd_privacy_public">Public</string>
+    <string name="cd_privacy_unlisted">Unlisted</string>
+    <string name="cd_privacy_private">Private</string>
+    <string name="cd_privacy_direct">Direct</string>
 
     <string name="post_user_boosted">%1$s boosted</string>
     <string name="post_replying_to">Replying to **[@%1$s]{onUserClick}**</string>

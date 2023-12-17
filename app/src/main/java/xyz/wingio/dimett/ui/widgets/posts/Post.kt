@@ -1,8 +1,8 @@
 package xyz.wingio.dimett.ui.widgets.posts
 
-import android.text.format.DateUtils
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -11,11 +11,10 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import xyz.wingio.dimett.R
 import xyz.wingio.dimett.ast.DefaultSyntakts
@@ -47,6 +46,8 @@ import xyz.wingio.dimett.utils.toMentionMap
 @Suppress("LocalVariableName")
 fun Post(
     post: Post,
+    showPronouns: Boolean = true, // TODO: Make a setting
+    showVisibility: Boolean = true, // TODO: Make a setting
     onAvatarClick: (String) -> Unit = {},
     onMentionClick: (String) -> Unit = {},
     onHashtagClick: (String) -> Unit = {},
@@ -57,29 +58,12 @@ fun Post(
 ) {
     val ctx = LocalContext.current
     val _post = post.boosted ?: post // The actually displayed post, not the same if its a boost
-    val timeString = remember(post.createdAt) {
-        DateUtils.getRelativeTimeSpanString(
-            /* time = */ post.createdAt.toEpochMilliseconds(),
-            /* now = */ System.currentTimeMillis(),
-            /* minResolution = */ 0L,
-            /* flags = */ DateUtils.FORMAT_ABBREV_ALL
-        ).toString()
-    }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         tonalElevation = 1.dp,
         shadowElevation = 3.dp
     ) {
-        Text(
-            text = timeString,
-            style = MaterialTheme.typography.labelSmall,
-            color = LocalContentColor.current.copy(alpha = 0.5f),
-            textAlign = TextAlign.End,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(18.dp)
-        )
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -97,14 +81,41 @@ fun Post(
                 )
             }
 
-            PostAuthor(
-                avatarUrl = _post.author.avatar,
-                displayName = _post.author.displayName,
-                acct = _post.author.acct,
-                emojis = _post.author.emojis.toEmojiMap(),
-                bot = _post.author.bot,
-                onAvatarClick = { onAvatarClick(_post.author.id) }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                PostAuthor(
+                    avatarUrl = _post.author.avatar,
+                    displayName = _post.author.displayName,
+                    acct = _post.author.acct,
+                    emojis = _post.author.emojis.toEmojiMap(),
+                    bot = _post.author.bot,
+                    onAvatarClick = { onAvatarClick(_post.author.id) },
+                    modifier = Modifier.weight(0.75f)
+                )
+
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(3.5.dp),
+                    modifier = Modifier
+                        .weight(0.25f)
+                ) {
+                    PostTimestamp(
+                        createdAt = _post.createdAt,
+                        visibility = _post.visibility,
+                        showVisibility = showVisibility
+                    )
+
+                    if (showPronouns) {
+                        PostPronouns(
+                            pronouns = _post.author.pronouns,
+                            emoji = _post.author.emojis
+                        )
+                    }
+                }
+            }
 
             _post.userRepliedTo?.let { repliedTo ->
                 _post.mentions.firstOrNull {
