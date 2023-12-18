@@ -18,3 +18,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Dimett"
 include(":app")
+
+include(":fediapi")
