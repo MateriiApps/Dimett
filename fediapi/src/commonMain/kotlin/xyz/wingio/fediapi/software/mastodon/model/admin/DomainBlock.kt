@@ -30,6 +30,7 @@ public data class DomainBlock(
     val obfuscate: Boolean
 ) {
 
+    @Serializable
     public enum class Severity {
         /**
          * Account statuses from this domain will be hidden by default

@@ -2,6 +2,7 @@ package xyz.wingio.fediapi.software.mastodon.model.admin
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import xyz.wingio.fediapi.Language
 import xyz.wingio.fediapi.software.mastodon.model.Role
 import xyz.wingio.fediapi.software.mastodon.model.account.Account
@@ -28,6 +29,7 @@ import xyz.wingio.fediapi.software.mastodon.model.account.Account
  * @param createdByApplicationId The ID of the [Application] that created this account, if applicable
  * @param invitedByAccountId The ID of the [Account] that invited this user, if applicable.
  */
+@Serializable
 public data class AdminAccount(
     val id: String,
     val username: String,
