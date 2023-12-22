@@ -39,7 +39,7 @@ public data class Announcement(
     val statuses: List<Status>,
     val tags: List<String>, // TODO: Model
     val emojis: List<CustomEmoji>,
-    val reactions: List<String> // TODO: Model
+    val reactions: List<Reaction>
 ) {
 
     /**

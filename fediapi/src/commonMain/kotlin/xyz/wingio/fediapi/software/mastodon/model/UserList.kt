@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
  * @param repliesPolicy Which replies should be shown in the list.
  */
 @Serializable
-public data class List(
+public data class UserList(
     val id: String,
     val title: String,
     @SerialName("replies_policy") val repliesPolicy: ReplyPolicy
