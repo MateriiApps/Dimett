@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.wingio.fediapi.software.mastodon.model.Rule
+import xyz.wingio.fediapi.software.mastodon.model.status.Status
 
 /**
  * Admin-level information about a filed report.
@@ -37,7 +38,7 @@ public data class Report(
     @SerialName("target_account") val targetAccount: AdminAccount,
     @SerialName("assigned_account") val assignedAccount: AdminAccount?,
     @SerialName("action_taken_by_account") val actionTakenByAccount: AdminAccount?,
-    val statuses: List<String>, // TODO: Model
+    val statuses: List<Status>,
     val rules: List<Rule>
 ) {
 

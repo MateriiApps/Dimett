@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.wingio.fediapi.HTML
 import xyz.wingio.fediapi.URL
+import xyz.wingio.fediapi.software.mastodon.model.status.Status.Tag
 
 /**
  * Represents an announcement set by an administrator.
@@ -37,7 +38,7 @@ public data class Announcement(
     val read: Boolean? = null,
     val mentions: List<Account>,
     val statuses: List<Status>,
-    val tags: List<String>, // TODO: Model
+    val tags: List<Tag>,
     val emojis: List<CustomEmoji>,
     val reactions: List<Reaction>
 ) {

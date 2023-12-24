@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * The visibility of a Status (TODO: Link)
+ * The visibility of a [Status][xyz.wingio.fediapi.software.mastodon.model.status.Status]
  */
 @Serializable
 public enum class Visibility {
