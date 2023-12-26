@@ -11,7 +11,7 @@ public typealias URL = String
 public typealias HTML = String
 
 /**
- * ISO 639-1 two-letter code
+ * ISO 639 language code (Most often 2 characters)
  */
 public typealias Language = String
 
