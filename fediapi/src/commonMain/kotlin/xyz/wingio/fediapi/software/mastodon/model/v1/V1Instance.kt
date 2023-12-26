@@ -32,7 +32,7 @@ import xyz.wingio.fediapi.software.mastodon.model.account.Account
 public data class V1Instance(
     val uri: String,
     val title: String,
-    @SerialName("short_description") val shortDescription: String
+    @SerialName("short_description") val shortDescription: String,
     val description: HTML,
     val email: String,
     val version: String,
